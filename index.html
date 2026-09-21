@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gargi AstroVastu</title>
 <meta name="description" content="Gargi AstroVastu — Vedic astrology (Kundali), Numerology and Vastu Shastra consultations.">
-<link rel="icon" type="image/png" href="gargi-logo.png">
+<link rel="icon" type="image/png" href="gargi-astrovastu.png">
 
 <!--
   ============================================================
@@ -22,34 +22,28 @@
     // Pre-filled message the client's customer will send on WhatsApp.
     whatsappMessage: "Namaste, I would like to book a consultation with Gargi AstroVastu.",
 
-    contactPhone: "+91 XXXXX XXXXX",     // PLACEHOLDER
+    contactPhone: "+91 83295 66105",     // PLACEHOLDER
 
     instagramUrl: "https://www.instagram.com/gargi_astrovastu",
     facebookUrl: "https://www.facebook.com/share/19cDA4MoKi/",
     youtubeUrl: "https://www.youtube.com/@GargiAstroVastu",
 
-    // ---- Testimonials, edited by the client in Notion (no code, no GitHub) ----
-    // The testimonials section embeds a Notion page. The client adds/edits/
-    // removes testimonials directly in Notion, like editing a doc — nothing
-    // on this site ever needs to change.
+    // ---- Testimonials, edited as a spreadsheet in the repo ----
+    // Testimonials live in testimonials.csv, right next to this file. Open
+    // it in Excel/Google Sheets/Numbers (or GitHub's own table preview),
+    // edit like any spreadsheet, save/export as CSV, re-upload to the repo.
+    // Two columns only: Name, Quote. Keep the header row as-is.
     //
-    // One-time setup (5-10 minutes):
-    //   1. In Notion, make a page (or a simple table) listing testimonials —
-    //      e.g. one heading per client with their quote underneath, or a
-    //      table with "Name" and "Quote" columns. Style it however you like;
-    //      it just needs to be readable on its own.
-    //   2. Share -> Publish -> Publish to web. Turn OFF "Allow duplicate as
-    //      template" if you don't want visitors copying the page.
-    //   3. Copy the published link Notion gives you (looks like
-    //      https://your-workspace.notion.site/xxxxxxxxxxxx).
-    //   4. Paste it below as notionTestimonialsUrl (leave the quotes).
-    //
-    // From then on: the client opens that Notion page, edits testimonials
-    // whenever they want, and the live website reflects it on next page
-    // load. No GitHub, no code, no redeploy.
-    //
-    // Leave this empty ("") to show the placeholder testimonial cards instead.
-    notionTestimonialsUrl: ""
+    // To add a testimonial without any spreadsheet app at all:
+    //   1. On GitHub, open testimonials.csv in the repo.
+    //   2. Click the pencil (Edit) icon — it's a plain table there too.
+    //   3. Add a new line: Name,"Quote text here" (wrap the quote in
+    //      double quotes if it contains a comma).
+    //   4. Commit the change.
+    //   5. GitHub Pages redeploys automatically, usually within a minute.
+    //      Reload the live site after that and the new testimonial is there.
+    // No HTML/CSS/JS editing needed for this — ever.
+    testimonialsFile: "testimonials.csv"
   };
 </script>
 
@@ -99,7 +93,7 @@
     display:flex; align-items:center; justify-content:space-between;
     padding:14px 20px;
   }
-  .brand{ display:flex; align-items:center; gap:10px; font-size:1.5rem; font-weight:700; }
+  .brand{ display:flex; align-items:center; gap:10px; font-size:1.5rem; font-weight:700; text-decoration:none; }
   .brand .g-mark{ width:40px; height:40px; object-fit:contain; }
   nav.links{ display:flex; gap:28px; font-size:0.98rem; }
   nav.links a{ text-decoration:none; color:var(--ink); opacity:0.85; }
@@ -168,13 +162,6 @@
     background:#fff3cd; color:#8a6d00; border:1px solid #f0dca0; border-radius:4px; padding:2px 6px;
   }
 
-  .testimonial-grid[hidden]{ display:none; }
-  .notion-embed-wrap{
-    margin-top:8px; border-radius:14px; overflow:hidden;
-    border:1px solid rgba(30,58,138,0.12); background:#fff;
-  }
-  .notion-embed{ width:100%; height:640px; border:0; display:block; }
-
   /* ---------- Showcase ---------- */
   .showcase-grid{
     display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px;
@@ -233,7 +220,7 @@
 <header class="site-header">
   <div class="nav-wrap">
     <a href="#top" class="brand">
-      <img class="g-mark" src="gargi-logo.png" alt="Gargi AstroVastu logo">
+      <img class="g-mark" src="gargi-astrovastu.png" alt="Gargi AstroVastu astrovastu" onerror="this.style.display='none'">
       Gargi AstroVastu
     </a>
     <button class="menu-toggle" onclick="document.querySelector('nav.links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
@@ -298,11 +285,6 @@
         <div class="who">— Client name <span class="placeholder-flag">placeholder</span></div>
       </div>
     </div>
-
-    <div class="notion-embed-wrap" id="notionEmbedWrap" hidden>
-      <iframe id="notionEmbedFrame" class="notion-embed" loading="lazy"
-        referrerpolicy="strict-origin-when-cross-origin"></iframe>
-    </div>
   </section>
 
   <section id="showcase">
@@ -359,21 +341,82 @@
   document.getElementById('socialFacebook').href = window.GARGI_CONFIG.facebookUrl;
   document.getElementById('socialYoutube').href = window.GARGI_CONFIG.youtubeUrl;
 
-  // ---- Testimonials embedded from Notion (client edits in Notion, not here) ----
-  function loadTestimonialsFromNotion(){
-    var url = window.GARGI_CONFIG.notionTestimonialsUrl;
-    if (!url) return; // keep the placeholder cards already in the HTML
-
-    var grid = document.getElementById('testimonialGrid');
-    var wrap = document.getElementById('notionEmbedWrap');
-    var frame = document.getElementById('notionEmbedFrame');
-
-    frame.src = url;
-    grid.hidden = true;
-    wrap.hidden = false;
+  // ---- Testimonials from testimonials.csv (edit it like a spreadsheet) ----
+  // Minimal CSV line parser: handles quoted fields and escaped ("") quotes,
+  // which is all a spreadsheet export needs.
+  function parseCsv(text){
+    var rows = [];
+    var row = [];
+    var field = '';
+    var inQuotes = false;
+    for (var i = 0; i < text.length; i++){
+      var c = text[i];
+      if (inQuotes){
+        if (c === '"'){
+          if (text[i + 1] === '"'){ field += '"'; i++; }
+          else { inQuotes = false; }
+        } else {
+          field += c;
+        }
+      } else {
+        if (c === '"'){ inQuotes = true; }
+        else if (c === ','){ row.push(field); field = ''; }
+        else if (c === '\n' || c === '\r'){
+          if (c === '\r' && text[i + 1] === '\n') i++;
+          row.push(field); field = '';
+          if (row.some(function(f){ return f.trim() !== ''; })) rows.push(row);
+          row = [];
+        } else {
+          field += c;
+        }
+      }
+    }
+    if (field !== '' || row.length){ row.push(field); rows.push(row); }
+    return rows;
   }
 
-  loadTestimonialsFromNotion();
+  function renderTestimonials(items){
+    var grid = document.getElementById('testimonialGrid');
+    grid.innerHTML = '';
+    items.forEach(function(item){
+      var card = document.createElement('div');
+      card.className = 'testimonial-card';
+      var quote = document.createTextNode('“' + item.quote + '”');
+      card.appendChild(quote);
+      var who = document.createElement('div');
+      who.className = 'who';
+      who.textContent = '— ' + item.name;
+      card.appendChild(who);
+      grid.appendChild(card);
+    });
+  }
+
+  function loadTestimonialsFromCsv(){
+    var url = window.GARGI_CONFIG.testimonialsFile;
+    if (!url) return; // keep the placeholder cards already in the HTML
+
+    fetch(url, { cache: 'no-store' })
+      .then(function(res){
+        if (!res.ok) throw new Error('testimonials.csv fetch failed: ' + res.status);
+        return res.text();
+      })
+      .then(function(csvText){
+        var rows = parseCsv(csvText);
+        if (!rows.length) return;
+        var dataRows = rows.slice(1); // first row is the "Name,Quote" header
+        var items = dataRows
+          .map(function(r){ return { name: (r[0] || '').trim(), quote: (r[1] || '').trim() }; })
+          .filter(function(item){ return item.name && item.quote; });
+        if (items.length) renderTestimonials(items);
+        // If the file is reachable but empty, leave the placeholders showing
+        // rather than blanking the section.
+      })
+      .catch(function(err){
+        console.warn('Could not load testimonials.csv, showing placeholders instead:', err);
+      });
+  }
+
+  loadTestimonialsFromCsv();
 
   function buildWhatsAppLink(){
     var num = window.GARGI_CONFIG.whatsappNumber.replace(/\D/g, '');
