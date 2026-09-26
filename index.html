@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  // Always land at the top on a refresh/reload, regardless of scroll
+  // position or a leftover #hash from an earlier visit.
+  if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+  window.addEventListener('load', function(){ window.scrollTo(0, 0); });
+</script>
 <title>Gargi AstroVastu</title>
 <meta name="description" content="Gargi AstroVastu — Vedic astrology (Kundali), Numerology and Vastu Shastra consultations.">
 <link rel="icon" type="image/png" href="gargi-mark.png">

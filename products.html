@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  // On a plain reload, always land at the top rather than wherever the
+  // browser remembered scrolling to. But a category link from the
+  // homepage ("Our Collections") arrives here as products.html#cat-...
+  // on purpose — don't fight that intentional anchor scroll.
+  if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+  window.addEventListener('load', function(){
+    if (!location.hash) { window.scrollTo(0, 0); }
+  });
+</script>
 <title>Products | Gargi AstroVastu</title>
 <meta name="description" content="Gargi AstroVastu — Vastu remedies and products.">
 <link rel="icon" type="image/png" href="gargi-mark.png">
@@ -181,12 +191,22 @@
     aspect-ratio:1/1; overflow:hidden;
   }
   /* Product photos are full "everything in one shot" info-cards (image +
-     name + benefits + price baked in by the designer), all designed as
-     square 1024x1024 posters — a fixed 1:1 box (object-fit:contain) keeps
-     every card in a row the same size, matching the posters' own shape so
-     there's no letterboxing. Buying happens via the button below the photo
-     — no on-photo overlay, so the image itself always stays fully clear. */
+     name + benefits + price baked in by the designer), mostly square
+     1024x1024 posters — a fixed 1:1 box (object-fit:contain) keeps every
+     card in a row the same size, matching the posters' own shape so
+     there's no letterboxing. The Vastu Remedy posters were designed
+     taller than square, so that category gets its own taller box below
+     rather than stretching or cropping them to fit the square one. */
   .product-photo img{ width:100%; height:100%; display:block; object-fit:contain; }
+  #cat-vastu-remedy-items .product-photo{ aspect-ratio:3/4; }
+
+  /* The whole photo is the buy-on-WhatsApp click target — no dark overlay
+     needed, so the poster itself always stays fully clear. */
+  .product-photo.is-clickable{ cursor:pointer; }
+  .product-photo.is-clickable:hover img,
+  .product-photo.is-clickable:focus-visible img{ transform:scale(1.02); }
+  .product-photo.is-clickable img{ transition:transform .15s ease; }
+  .product-photo.is-clickable:focus-visible{ outline:2px solid var(--gold); outline-offset:-2px; }
 
   .product-body{ padding:20px 20px 24px; display:flex; flex-direction:column; gap:10px; flex:1; }
   .product-body h3{ font-size:1.2rem; margin-bottom:0; }
@@ -367,6 +387,17 @@
       img.loading = 'lazy';
       img.onerror = function(){ photo.textContent = 'Image not found: ' + item.image; };
       photo.appendChild(img);
+
+      // The photo itself is the "Buy Now" click target — tapping/clicking
+      // the product image opens WhatsApp directly, no overlay needed.
+      photo.classList.add('is-clickable');
+      photo.setAttribute('role', 'button');
+      photo.setAttribute('tabindex', '0');
+      photo.setAttribute('aria-label', 'Buy ' + item.name + ' on WhatsApp');
+      photo.onclick = function(){ openBookingModal(productMessage); };
+      photo.onkeydown = function(e){
+        if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openBookingModal(productMessage); }
+      };
     } else {
       photo.textContent = 'No photo yet';
     }
