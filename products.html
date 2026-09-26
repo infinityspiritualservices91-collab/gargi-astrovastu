@@ -4,28 +4,73 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>
+  // On a plain reload, always land at the top rather than wherever the
+  // browser remembered scrolling to. But a category link from the
+  // homepage ("Our Collections") arrives here as products.html#cat-...
+  // on purpose — don't fight that intentional anchor scroll.
   if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
-  window.addEventListener('load', function(){ window.scrollTo(0, 0); });
+  window.addEventListener('load', function(){
+    if (!location.hash) { window.scrollTo(0, 0); }
+  });
 </script>
-<title>Products &amp; Remedies — Gargi AstroVastu</title>
-<meta name="description" content="Energized Vastu items, Spiritual Jewelry, Rudraksha, and sacred remedies at Gargi AstroVastu.">
-<link rel="icon" type="image/png" href="gargi-astrovastu.png">
+<title>Products | Gargi AstroVastu</title>
+<meta name="description" content="Gargi AstroVastu — Vastu remedies and products.">
+<link rel="icon" type="image/png" href="gargi-mark.png">
 
+<!--
+  ============================================================
+  EDIT-ME CONFIG — same values as index.html. Keep both files in
+  sync if you change the WhatsApp number, message, or socials.
+  ============================================================
+-->
 <script>
   window.GARGI_CONFIG = {
     whatsappNumber: "918329566105",
-    whatsappMessage: "Namaste, I am interested in purchasing products from Gargi AstroVastu.",
+    whatsappMessage: "Namaste, I would like to book a consultation with Gargi AstroVastu.",
     contactPhone: "+91 83295 66105",
+
     instagramUrl: "https://www.instagram.com/gargi_astrovastu",
     facebookUrl: "https://www.facebook.com/share/19cDA4MoKi/",
     youtubeUrl: "https://www.youtube.com/@GargiAstroVastu",
+
+    // ---- Products, edited as a spreadsheet in the repo ----
+    // Products live in products.csv, right next to this file. Open it in
+    // Excel/Google Sheets/Numbers (or GitHub's own table preview), edit
+    // like any spreadsheet, save/export as CSV, re-upload to the repo.
+    //
+    // Columns: Category, Name, Tagline, Benefits, Price, Image, WhatsAppMessage
+    //   - Category: groups products into their own swipeable row, e.g.
+    //     "Vastu Remedy Products", "Stone Bracelets", "Rudraksha". Products
+    //     are shown in the order categories first appear in the file, and
+    //     within a category in the row order you put them.
+    //   - Benefits: separate multiple points with a pipe character |
+    //     e.g.  North-East corner remedy|Supports positive energy|Aids focus
+    //   - Image: filename of a photo uploaded to the repo (e.g. products/rudraksha-5mukhi.jpg),
+    //     leave blank to show a placeholder box instead.
+    //     RECOMMENDED IMAGE SIZE: square, 1000x1000px (min 800x800px), JPG,
+    //     under ~300KB. Square crops line up cleanly in the swipe row —
+    //     center the product in the frame with even margin on all sides.
+    //   - WhatsAppMessage: the exact message that opens on WhatsApp when someone
+    //     clicks "Buy Now" on THIS product. Wrap it in double quotes if it
+    //     contains a comma. Leave it blank and a sensible default ("Namaste,
+    //     I would like to buy <product name>...") is used automatically.
+    //
+    // To add a product without any spreadsheet app at all:
+    //   1. On GitHub, open products.csv in the repo, click the pencil icon.
+    //   2. Add a new line following the same 7-column format.
+    //   3. Commit the change — GitHub Pages redeploys automatically,
+    //      usually within a minute.
+    // No HTML/CSS/JS editing needed for this — ever.
     productsFile: "products.csv"
   };
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Serif+4:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Serif+4:wght@400;500;600&family=Noto+Serif+Devanagari:wght@500;700&display=swap" rel="stylesheet">
+
+<!-- QR code generator, client-side only — no backend, no data leaves the browser -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
   :root{
@@ -50,13 +95,14 @@
     color:var(--blue);
     margin:0 0 0.3em 0;
   }
+  .devanagari{ font-family:'Noto Serif Devanagari', serif; }
   a{ color:inherit; }
   img{ max-width:100%; display:block; }
 
-  /* Header / Nav */
+  /* ---------- Nav ---------- */
   header.site-header{
     position:sticky; top:0; z-index:50;
-    background:rgba(253,251,245,0.96);
+    background:rgba(253,251,245,0.94);
     backdrop-filter:blur(6px);
     border-bottom:1px solid rgba(30,58,138,0.12);
   }
@@ -70,6 +116,7 @@
   nav.links{ display:flex; gap:28px; font-size:0.98rem; }
   nav.links a{ text-decoration:none; color:var(--ink); opacity:0.85; }
   nav.links a:hover{ color:var(--blue); opacity:1; }
+  nav.links a.current{ color:var(--blue); opacity:1; font-weight:600; }
   .menu-toggle{ display:none; background:none; border:none; font-size:1.6rem; color:var(--blue); cursor:pointer; }
 
   @media (max-width:760px){
@@ -81,90 +128,148 @@
     }
   }
 
-  /* Page Layout */
-  .page-hero{
-    max-width:var(--maxw); margin:0 auto;
-    padding:48px 20px 24px; text-align:center;
-  }
-  .page-hero h1{ font-size:2.4rem; }
-  .page-hero p{ max-width:600px; margin:0 auto; opacity:0.8; font-size:1.05rem; }
-
-  .cat-nav{
-    display:flex; justify-content:center; gap:12px; flex-wrap:wrap;
-    margin:24px 0 36px; padding:0 20px;
-  }
-  .cat-link{
-    padding:8px 18px; border-radius:999px; border:1px solid rgba(30,58,138,0.25);
-    text-decoration:none; font-size:0.92rem; color:var(--blue); transition:all .15s ease;
-  }
-  .cat-link:hover{ background:var(--blue); color:#fff; }
-
-  section.category-section{ max-width:var(--maxw); margin:0 auto; padding:24px 20px 36px; }
-  section.category-section h2{
-    font-size:1.8rem; border-bottom:2px solid rgba(201,162,39,0.3);
-    padding-bottom:8px; margin-bottom:20px;
-  }
-
-  /* Horizontal Scrollable Carousel Row */
-  .product-grid{
-    display:flex;
-    gap:20px;
-    overflow-x:auto;
-    padding-bottom:16px;
-    scroll-snap-type:x mandatory;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:thin;
-    scrollbar-color:var(--gold) transparent;
-  }
-  .product-grid::-webkit-scrollbar { height:6px; }
-  .product-grid::-webkit-scrollbar-thumb { background:var(--gold); border-radius:10px; }
-
-  .product-card{
-    flex:0 0 280px;
-    scroll-snap-align:start;
-    background:#fff; border:1px solid rgba(30,58,138,0.12); border-radius:12px;
-    overflow:hidden; display:flex; flex-direction:column; justify-content:space-between;
-    transition:transform .15s ease, box-shadow .15s ease;
-  }
-  .product-card:hover{ transform:translateY(-3px); box-shadow:0 8px 20px rgba(30,58,138,0.12); }
-  
-  .product-image{
-    width:100%; height:220px; background:rgba(30,58,138,0.04);
-    display:flex; align-items:center; justify-content:center; overflow:hidden;
-    text-align:center; padding:12px; color:var(--blue); font-size:0.95rem; font-weight:600;
-  }
-  .product-image img{ width:100%; height:100%; object-fit:cover; }
-  
-  .product-info{ padding:18px; display:flex; flex-direction:column; flex-grow:1; }
-  .product-title{ font-size:1.2rem; margin-bottom:4px; color:var(--blue); }
-  .product-tagline{ font-size:0.85rem; color:var(--gold); font-weight:600; margin-bottom:8px; }
-  .product-price{ font-weight:600; color:var(--ink); font-size:1rem; margin-bottom:12px; }
-  .product-benefits{ font-size:0.85rem; opacity:0.85; margin:0 0 16px 0; padding-left:18px; flex-grow:1; }
-  .product-benefits li{ margin-bottom:4px; }
-  
   .btn{
-    display:inline-block; text-align:center; padding:9px 18px; border-radius:999px;
-    font-family:'Source Serif 4', serif; font-size:0.9rem; text-decoration:none;
-    cursor:pointer; border:1px solid var(--blue); transition:all .15s ease;
+    display:inline-block; padding:13px 30px; border-radius:999px;
+    font-family:'Source Serif 4', serif; font-size:1rem; text-decoration:none;
+    cursor:pointer; border:1.5px solid var(--blue); transition:transform .15s ease;
   }
+  .btn:hover{ transform:translateY(-1px); }
   .btn-primary{ background:var(--blue); color:#fff; }
   .btn-primary:hover{ background:var(--blue-dark); }
+  .btn-gold{ background:var(--gold); border-color:var(--gold); color:#fff; }
+  .btn-small{ padding:9px 20px; font-size:0.9rem; }
 
-  /* Custom Poster Card Styling */
-  .cta-poster-card{
-    background:linear-gradient(145deg, #ffffff 0%, #fdf9ed 100%);
-    border:2px dashed var(--gold);
+  section{ max-width:var(--maxw); margin:0 auto; padding:56px 20px; }
+  section h2{ font-size:2rem; text-align:center; margin-bottom:8px; }
+  .section-sub{ text-align:center; opacity:0.7; margin-bottom:36px; }
+
+  .page-hero{ max-width:var(--maxw); margin:0 auto; padding:48px 20px 16px; text-align:center; }
+  .page-hero .tagline-mr{ font-size:1.05rem; color:var(--gold); margin-bottom:8px; }
+
+  /* ---------- Products: category rows ---------- */
+  #categoriesContainer{ max-width:var(--maxw); margin:0 auto; padding:16px 20px 56px; }
+  .category-section{ margin-bottom:52px; }
+  .category-section h2{ text-align:left; font-size:1.7rem; margin-bottom:18px; }
+
+  .carousel-wrap{ position:relative; }
+  .carousel{
+    display:flex; align-items:stretch; gap:22px; overflow-x:auto;
+    scroll-snap-type:x proximity;
+    padding:4px 4px 18px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(30,58,138,0.25) transparent;
   }
-  .cta-poster-card .product-title{ color:var(--blue); font-size:1.25rem; }
-  .cta-poster-card .btn{ width:100%; margin-top:auto; }
+  .carousel::-webkit-scrollbar{ height:6px; }
+  .carousel::-webkit-scrollbar-thumb{ background:rgba(30,58,138,0.25); border-radius:3px; }
 
-  footer{ text-align:center; padding:30px 20px; font-size:0.85rem; opacity:0.6; border-top:1px solid rgba(30,58,138,0.12); margin-top:40px; }
-  .social-row{ display:flex; justify-content:center; gap:18px; margin-bottom:14px; opacity:1; }
+  .car-arrow{
+    position:absolute; top:38%; transform:translateY(-50%);
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid rgba(30,58,138,0.35); background:transparent; color:var(--blue);
+    cursor:pointer; font-size:1.3rem; line-height:1; z-index:5;
+    display:flex; align-items:center; justify-content:center;
+    backdrop-filter:none; transition:background .15s ease, color .15s ease;
+  }
+  .car-arrow:hover{ background:var(--blue); color:#fff; }
+  .car-arrow.left{ left:-8px; }
+  .car-arrow.right{ right:-8px; }
+  @media (max-width:760px){
+    .car-arrow{ display:none; } /* touch devices swipe natively */
+  }
+
+  .product-card{
+    background:#fff; border:1px solid rgba(30,58,138,0.12); border-radius:16px;
+    overflow:hidden; display:flex; flex-direction:column;
+    flex:0 0 auto; width:280px; height:100%; scroll-snap-align:start;
+  }
+  .product-photo{
+    position:relative;
+    background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--blue); font-size:0.9rem; text-align:center; padding:16px;
+    aspect-ratio:1/1; overflow:hidden;
+  }
+  /* Product photos are full "everything in one shot" info-cards (image +
+     name + benefits + price baked in by the designer), all normalized to
+     the same 1024x1024 square — a fixed 1:1 box (object-fit:contain) keeps
+     every card in every category the exact same size, with no per-category
+     exceptions and no letterboxing. */
+  .product-photo img{ width:100%; height:100%; display:block; object-fit:contain; }
+
+  /* The whole photo opens an enlarged view (lightbox) so the dense
+     infographic text baked into each poster is easy to read — no dark
+     overlay needed, so the poster itself always stays fully clear. */
+  .product-photo.is-clickable{ cursor:zoom-in; }
+  .product-photo.is-clickable:hover img,
+  .product-photo.is-clickable:focus-visible img{ transform:scale(1.02); }
+  .product-photo.is-clickable img{ transition:transform .15s ease; }
+  .product-photo.is-clickable:focus-visible{ outline:2px solid var(--gold); outline-offset:-2px; }
+
+  /* ---------- Image lightbox (enlarge product poster on click) ---------- */
+  .lightbox-overlay{
+    position:fixed; inset:0; background:rgba(21,42,99,0.82);
+    display:none; align-items:center; justify-content:center; z-index:110; padding:24px;
+  }
+  .lightbox-overlay.open{ display:flex; }
+  .lightbox-overlay img{
+    max-width:100%; max-height:90vh; width:auto; height:auto;
+    border-radius:10px; box-shadow:0 12px 40px rgba(0,0,0,0.35);
+  }
+  .lightbox-close{
+    position:absolute; top:18px; right:22px; background:none; border:none;
+    font-size:2rem; line-height:1; color:#fff; cursor:pointer;
+  }
+
+  .product-body{ padding:20px 20px 24px; display:flex; flex-direction:column; gap:10px; flex:1; }
+  .product-body h3{ 
+    font-size:1.2rem; 
+    margin-bottom:0; 
+    min-height:2.8em; 
+    line-height:1.3; 
+  }
+  .product-price{ color:var(--gold); font-weight:600; font-size:1.05rem; margin-top:auto; padding-top:6px; }
+  .product-card .btn{ margin-top:6px; align-self:flex-start; }
+
+  .placeholder-flag{
+    display:inline-block; margin-top:2px; font-size:0.72rem; font-style:normal;
+    background:#fff3cd; color:#8a6d00; border:1px solid #f0dca0; border-radius:4px; padding:2px 6px;
+  }
+
+  footer{ text-align:center; padding:30px 20px; font-size:0.85rem; opacity:0.6; }
+  .social-row{
+    display:flex; justify-content:center; gap:18px; margin-bottom:14px; opacity:1;
+  }
   .social-row a{
     width:38px; height:38px; border-radius:50%; border:1px solid rgba(30,58,138,0.25);
     display:flex; align-items:center; justify-content:center; color:var(--blue);
+    transition:background .15s ease, color .15s ease;
   }
+  .social-row a:hover{ background:var(--blue); color:#fff; }
   .social-row svg{ width:18px; height:18px; fill:currentColor; }
+
+  /* ---------- QR Modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(21,42,99,0.55);
+    display:none; align-items:center; justify-content:center; z-index:100; padding:20px;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal-box{
+    background:#fff; border-radius:16px; padding:32px; max-width:360px; width:100%;
+    text-align:center; position:relative;
+  }
+  .modal-box h3{ margin-bottom:4px; }
+  .modal-box p.hint{ font-size:0.9rem; opacity:0.75; margin-bottom:18px; }
+  #qrcode{ display:flex; justify-content:center; margin:0 auto 18px; }
+  .modal-close{
+    position:absolute; top:12px; right:14px; background:none; border:none;
+    font-size:1.4rem; color:var(--blue); cursor:pointer;
+  }
+  #qrLink{
+    display:inline-block; border-radius:12px; transition:transform .15s ease, box-shadow .15s ease;
+  }
+  #qrLink:hover{ transform:translateY(-2px); box-shadow:0 6px 18px rgba(30,58,138,0.18); }
+
 </style>
 </head>
 <body>
@@ -172,13 +277,13 @@
 <header class="site-header">
   <div class="nav-wrap">
     <a href="index.html" class="brand">
-      <img class="g-mark" src="gargi-astrovastu.png" alt="Gargi AstroVastu logo" onerror="this.style.display='none'">
+      <img class="g-mark" src="gargi-mark.png" alt="Gargi AstroVastu logo" onerror="this.style.display='none'">
       Gargi AstroVastu
     </a>
     <button class="menu-toggle" onclick="document.querySelector('nav.links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
     <nav class="links">
       <a href="index.html#services">Services</a>
-      <a href="products.html">Products</a>
+      <a href="products.html" class="current">Products</a>
       <a href="index.html#testimonials">Testimonials</a>
       <a href="index.html#contact">Contact</a>
     </nav>
@@ -187,154 +292,326 @@
 
 <main>
   <div class="page-hero">
-    <h1>Products &amp; Sacred Remedies</h1>
-    <p>Authentic, energized items to enhance positivity, wealth, balance, and harmony in your living space and personal life.</p>
-    
-    <div class="cat-nav">
-      <a href="#cat-vastu-remedy-items" class="cat-link">Vastu Remedy Items</a>
-      <a href="#cat-spiritual-jewelry" class="cat-link">Spiritual Jewelry</a>
-      <a href="#cat-rudraksha" class="cat-link">Rudraksha</a>
-    </div>
+    <h1>Our Products</h1>
+    <p class="sub">Vastu remedies and items recommended as part of your consultation.</p>
   </div>
 
-  <div id="products-container">
-    <!-- Products rendered dynamically via CSV -->
+  <!-- Category rows are built here from products.csv. -->
+  <div id="categoriesContainer">
+    <!-- Placeholder content shown until products.csv loads (or if it's empty) -->
+    <div class="category-section">
+      <h2>Vastu Remedy Products</h2>
+      <div class="carousel-wrap">
+        <button class="car-arrow left" type="button" aria-label="Scroll left" onclick="this.nextElementSibling.scrollBy({left:-280,behavior:'smooth'})">&lsaquo;</button>
+        <div class="carousel">
+          <div class="product-card">
+            <div class="product-photo">
+              PLACEHOLDER<br>product photo
+            </div>
+            <div class="product-body">
+              <h3>Product name <span class="placeholder-flag">placeholder</span></h3>
+              <div class="product-price">On request</div>
+              <button class="btn btn-primary btn-small" onclick="openBookingModal('Namaste, I would like to buy the Vastu Remedy Piece. Could you share price and availability?')">Buy Now on WhatsApp</button>
+            </div>
+          </div>
+        </div>
+        <button class="car-arrow right" type="button" aria-label="Scroll right" onclick="this.previousElementSibling.scrollBy({left:280,behavior:'smooth'})">&rsaquo;</button>
+      </div>
+    </div>
   </div>
 </main>
 
 <footer>
-  <div class="social-row">
-    <a href="https://www.instagram.com/gargi_astrovastu" target="_blank" rel="noopener" aria-label="Instagram">
+  <div class="social-row" id="socialRow">
+    <a href="#" id="socialInstagram" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
       <svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.24 2.22.4.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.35 1.05.4 2.22.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.24 1.8-.4 2.22-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.05.35-2.22.4-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.24-2.22-.4a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.35-1.05-.4-2.22-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.24-1.8.4-2.22.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.05-.35 2.22-.4 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07c-1.28.06-2.15.26-2.91.56a5.88 5.88 0 0 0-2.13 1.38A5.88 5.88 0 0 0 .63 4.14c-.3.76-.5 1.63-.56 2.91C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.28.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.66 1.34 1.07 2.13 1.38.76.3 1.63.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.28-.06 2.15-.26 2.91-.56a5.88 5.88 0 0 0 2.13-1.38 5.88 5.88 0 0 0 1.38-2.13c.3-.76.5-1.63.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.28-.26-2.15-.56-2.91a5.88 5.88 0 0 0-1.38-2.13A5.88 5.88 0 0 0 19.86.63c-.76-.3-1.63-.5-2.91-.56C15.67.01 15.26 0 12 0Zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84Zm0 10.16A4 4 0 1 1 16 12a4 4 0 0 1-4 4Zm6.41-10.43a1.44 1.44 0 1 1-1.44-1.44 1.44 1.44 0 0 1 1.44 1.44Z"/></svg>
     </a>
-    <a href="https://www.facebook.com/share/19cDA4MoKi/" target="_blank" rel="noopener" aria-label="Facebook">
+    <a href="#" id="socialFacebook" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">
       <svg viewBox="0 0 24 24"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.9h-2.34V22c4.78-.79 8.44-4.94 8.44-9.94Z"/></svg>
     </a>
-    <a href="https://www.youtube.com/@GargiAstroVastu" target="_blank" rel="noopener" aria-label="YouTube">
+    <a href="#" id="socialYoutube" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube">
       <svg viewBox="0 0 24 24"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.51 3.5 12 3.5 12 3.5s-7.51 0-9.38.55A3.02 3.02 0 0 0 .5 6.19 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.81 3.02 3.02 0 0 0 2.12 2.14c1.87.55 9.38.55 9.38.55s7.51 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.81ZM9.6 15.6V8.4l6.27 3.6Z"/></svg>
     </a>
   </div>
   &copy; <span id="year"></span> Gargi AstroVastu. All rights reserved.
 </footer>
 
+<!-- QR / WhatsApp booking modal -->
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeBookingModal()" aria-label="Close">&times;</button>
+    <h3>Book a Consultation</h3>
+    <p class="hint">Scan with WhatsApp, or tap the code to open WhatsApp directly</p>
+    <a href="#" id="qrLink" target="_blank" rel="noopener" aria-label="Open WhatsApp">
+      <div id="qrcode"></div>
+    </a>
+  </div>
+</div>
+
+<!-- Enlarged product image lightbox -->
+<div class="lightbox-overlay" id="imageLightbox">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">&times;</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // CSV Parser
-  function parseCSV(text) {
-    const lines = text.trim().split('\n');
-    const headers = lines[0].split(',').map(h => h.trim());
-    const results = [];
-    
-    for (let i = 1; i < lines.length; i++) {
-      if (!lines[i].trim()) continue;
-      const row = [];
-      let inQuotes = false;
-      let current = '';
-      
-      for (let char of lines[i]) {
-        if (char === '"' || char === "'") {
-          inQuotes = !inQuotes;
-        } else if (char === ',' && !inQuotes) {
-          row.push(current.trim().replace(/^["']|["']$/g, ''));
-          current = '';
+  document.getElementById('socialInstagram').href = window.GARGI_CONFIG.instagramUrl;
+  document.getElementById('socialFacebook').href = window.GARGI_CONFIG.facebookUrl;
+  document.getElementById('socialYoutube').href = window.GARGI_CONFIG.youtubeUrl;
+
+  // ---- Products from products.csv (edit it like a spreadsheet) ----
+  // Same minimal CSV parser used for testimonials.csv on the home page.
+  function parseCsv(text){
+    var rows = [];
+    var row = [];
+    var field = '';
+    var inQuotes = false;
+    for (var i = 0; i < text.length; i++){
+      var c = text[i];
+      if (inQuotes){
+        if (c === '"'){
+          if (text[i + 1] === '"'){ field += '"'; i++; }
+          else { inQuotes = false; }
         } else {
-          current += char;
+          field += c;
+        }
+      } else {
+        if (c === '"'){ inQuotes = true; }
+        else if (c === ','){ row.push(field); field = ''; }
+        else if (c === '\n' || c === '\r'){
+          if (c === '\r' && text[i + 1] === '\n') i++;
+          row.push(field); field = '';
+          if (row.some(function(f){ return f.trim() !== ''; })) rows.push(row);
+          row = [];
+        } else {
+          field += c;
         }
       }
-      row.push(current.trim().replace(/^["']|["']$/g, ''));
-      
-      const item = {};
-      headers.forEach((h, idx) => { item[h] = row[idx] || ''; });
-      results.push(item);
     }
-    return results;
+    if (field !== '' || row.length){ row.push(field); rows.push(row); }
+    return rows;
   }
 
-  // Render Engine
-  async function loadProducts() {
-    try {
-      const response = await fetch(window.GARGI_CONFIG.productsFile);
-      const text = await response.text();
-      const products = parseCSV(text);
-      
-      const categories = {};
-      products.forEach(p => {
-        const cat = p.Category || 'Other';
-        if (!categories[cat]) categories[cat] = [];
-        categories[cat].push(p);
+  // Builds one product card element (used inside every category's carousel).
+  function buildProductCard(item){
+    var card = document.createElement('div');
+    card.className = 'product-card';
+
+    var productMessage = item.whatsappMessage ||
+      ('Namaste, I would like to buy the ' + item.name + '. Could you share price and availability?');
+
+    var photo = document.createElement('div');
+    photo.className = 'product-photo';
+    if (item.image){
+      var img = document.createElement('img');
+      img.src = item.image;
+      img.alt = item.name;
+      img.loading = 'lazy';
+      img.onerror = function(){ photo.textContent = 'Image not found: ' + item.image; };
+      photo.appendChild(img);
+
+      // The poster is itself the product info (name, benefits, how to use —
+      // all baked into the image), so tapping/clicking it just opens an
+      // enlarged view to read it. Buying stays on the separate button below.
+      var imageSrc = item.image;
+      photo.classList.add('is-clickable');
+      photo.setAttribute('role', 'button');
+      photo.setAttribute('tabindex', '0');
+      photo.setAttribute('aria-label', 'View larger image of ' + item.name);
+      photo.onclick = function(){ openLightbox(imageSrc, item.name); };
+      photo.onkeydown = function(e){
+        if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openLightbox(imageSrc, item.name); }
+      };
+    } else {
+      photo.textContent = 'No photo yet';
+    }
+
+    card.appendChild(photo);
+
+    var body = document.createElement('div');
+    body.className = 'product-body';
+
+    // Name, tagline and benefits are already baked into the product photo
+    // itself (the "everything in one shot" info-card style), so the card
+    // body below it only adds the name (for accessibility/search) and the
+    // price + buy button, rather than repeating text the image already shows.
+    var h3 = document.createElement('h3');
+    h3.textContent = item.name;
+    body.appendChild(h3);
+
+    var price = document.createElement('div');
+    price.className = 'product-price';
+    price.textContent = item.price || 'On request';
+    body.appendChild(price);
+
+    var btn = document.createElement('button');
+    btn.className = 'btn btn-primary btn-small';
+    btn.textContent = 'Buy Now on WhatsApp';
+    btn.onclick = function(){ openBookingModal(productMessage); };
+    body.appendChild(btn);
+
+    card.appendChild(body);
+    return card;
+  }
+
+  // Groups items by category, preserving the order categories first appear in.
+  function groupByCategory(items){
+    var order = [];
+    var map = {};
+    items.forEach(function(item){
+      var cat = item.category || 'Other';
+      if (!map[cat]){ map[cat] = []; order.push(cat); }
+      map[cat].push(item);
+    });
+    return order.map(function(cat){ return { category: cat, items: map[cat] }; });
+  }
+
+  function slugify(text){
+    return 'cat-' + text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+
+  // Renders every category as its own heading + swipeable row of product cards.
+  function renderProducts(items){
+    var container = document.getElementById('categoriesContainer');
+    container.innerHTML = '';
+    var groups = groupByCategory(items);
+
+    groups.forEach(function(group, idx){
+      var section = document.createElement('div');
+      section.className = 'category-section';
+      section.id = slugify(group.category);
+
+      var h2 = document.createElement('h2');
+      h2.textContent = group.category;
+      section.appendChild(h2);
+
+      var wrap = document.createElement('div');
+      wrap.className = 'carousel-wrap';
+
+      var carousel = document.createElement('div');
+      carousel.className = 'carousel';
+      carousel.id = 'carousel-' + idx;
+      group.items.forEach(function(item){
+        carousel.appendChild(buildProductCard(item));
       });
 
-      const container = document.getElementById('products-container');
-      container.innerHTML = '';
+      var leftBtn = document.createElement('button');
+      leftBtn.className = 'car-arrow left';
+      leftBtn.type = 'button';
+      leftBtn.setAttribute('aria-label', 'Scroll left');
+      leftBtn.innerHTML = '&lsaquo;';
+      leftBtn.onclick = function(){ carousel.scrollBy({ left: -280, behavior: 'smooth' }); };
 
-      for (const [categoryName, items] of Object.entries(categories)) {
-        const section = document.createElement('section');
-        const catId = 'cat-' + categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-        section.className = 'category-section';
-        section.id = catId;
+      var rightBtn = document.createElement('button');
+      rightBtn.className = 'car-arrow right';
+      rightBtn.type = 'button';
+      rightBtn.setAttribute('aria-label', 'Scroll right');
+      rightBtn.innerHTML = '&rsaquo;';
+      rightBtn.onclick = function(){ carousel.scrollBy({ left: 280, behavior: 'smooth' }); };
 
-        let itemsHTML = items.map(item => {
-          const benefitsList = item.Benefits ? item.Benefits.split('|').map(b => `<li>${b.trim()}</li>`).join('') : '';
-          const waMsg = encodeURIComponent(item.WhatsAppMessage || `Namaste, I am interested in ${item.Name}`);
-          
-          return `
-            <div class="product-card">
-              <div class="product-image">
-                <img src="${item.Image}" alt="${item.Name}" onerror="this.remove(); this.parentElement.innerHTML='<span>${item.Name}</span>';">
-              </div>
-              <div class="product-info">
-                <h3 class="product-title">${item.Name}</h3>
-                ${item.Tagline ? `<div class="product-tagline">${item.Tagline}</div>` : ''}
-                <div class="product-price">${item.Price}</div>
-                ${benefitsList ? `<ul class="product-benefits">${benefitsList}</ul>` : ''}
-                <a href="https://wa.me/${window.GARGI_CONFIG.whatsappNumber}?text=${waMsg}" class="btn btn-primary" target="_blank" rel="noopener">Inquire via WhatsApp</a>
-              </div>
-            </div>
-          `;
-        }).join('');
+      wrap.appendChild(leftBtn);
+      wrap.appendChild(carousel);
+      wrap.appendChild(rightBtn);
+      section.appendChild(wrap);
+      container.appendChild(section);
+    });
+  }
 
-        // Placeholder poster cards
-        if (categoryName === "Vastu Remedy Items") {
-          itemsHTML += `
-            <div class="product-card cta-poster-card">
-              <div class="product-image">
-                <span>Custom Vastu Remedies</span>
-              </div>
-              <div class="product-info">
-                <h3 class="product-title">Custom &amp; Extended Remedies</h3>
-                <p style="font-size:0.88rem; opacity:0.85; margin-bottom:16px;">Looking for specific Pyramids, Yantras, Gemstone Trees, or custom space remedies?</p>
-                <a href="https://wa.me/${window.GARGI_CONFIG.whatsappNumber}?text=Namaste%20Gargi%20Ji%2C%20I%20am%20inquiring%20about%20Custom%20and%20Extended%20Vastu%20Remedies." class="btn btn-primary" target="_blank" rel="noopener">Inquire via WhatsApp</a>
-              </div>
-            </div>
-          `;
-        } else if (categoryName === "Spiritual Jewelry") {
-          itemsHTML += `
-            <div class="product-card cta-poster-card">
-              <div class="product-image">
-                <span>Bespoke Spiritual Jewelry</span>
-              </div>
-              <div class="product-info">
-                <h3 class="product-title">Bespoke Spiritual Jewelry</h3>
-                <p style="font-size:0.88rem; opacity:0.85; margin-bottom:16px;">Need specific gemstones, custom mala combinations, or energized protection items?</p>
-                <a href="https://wa.me/${window.GARGI_CONFIG.whatsappNumber}?text=Namaste%20Gargi%20Ji%2C%20I%20am%20inquiring%20about%20Custom%20Spiritual%20Jewelry." class="btn btn-primary" target="_blank" rel="noopener">Inquire via WhatsApp</a>
-              </div>
-            </div>
-          `;
-        }
+  function loadProductsFromCsv(){
+    var url = window.GARGI_CONFIG.productsFile;
+    if (!url) return; // keep the placeholder card already in the HTML
 
-        section.innerHTML = `
-          <h2>${categoryName}</h2>
-          <div class="product-grid">${itemsHTML}</div>
-        `;
-        container.appendChild(section);
-      }
-    } catch (err) {
-      console.error("Error parsing product CSV:", err);
+    fetch(url, { cache: 'no-store' })
+      .then(function(res){
+        if (!res.ok) throw new Error('products.csv fetch failed: ' + res.status);
+        return res.text();
+      })
+      .then(function(csvText){
+        var rows = parseCsv(csvText);
+        if (!rows.length) return;
+        var dataRows = rows.slice(1); // header: Category,Name,Tagline,Benefits,Price,Image,WhatsAppMessage
+        var items = dataRows
+          .map(function(r){
+            return {
+              category: (r[0] || '').trim(),
+              name: (r[1] || '').trim(),
+              tagline: (r[2] || '').trim(),
+              benefits: (r[3] || '').split('|').map(function(b){ return b.trim(); }).filter(Boolean),
+              price: (r[4] || '').trim(),
+              image: (r[5] || '').trim(),
+              whatsappMessage: (r[6] || '').trim()
+            };
+          })
+          .filter(function(item){ return item.name; });
+        if (items.length) renderProducts(items);
+      })
+      .catch(function(err){
+        console.warn('Could not load products.csv, showing placeholder instead:', err);
+      });
+  }
+
+  loadProductsFromCsv();
+
+  function buildWhatsAppLink(customMessage){
+    var num = window.GARGI_CONFIG.whatsappNumber.replace(/\D/g, '');
+    var msg = encodeURIComponent(customMessage || window.GARGI_CONFIG.whatsappMessage || '');
+    return 'https://wa.me/' + num + (msg ? ('?text=' + msg) : '');
+  }
+
+  // Each product has its own WhatsApp message, so the QR is re-rendered
+  // every time the modal opens rather than cached after the first render.
+  function openBookingModal(customMessage){
+    var modal = document.getElementById('bookingModal');
+    modal.classList.add('open');
+    var link = buildWhatsAppLink(customMessage);
+    document.getElementById('qrLink').href = link;
+
+    var qrEl = document.getElementById('qrcode');
+    qrEl.innerHTML = '';
+    if(window.QRCode){
+      new QRCode(qrEl, {
+        text: link,
+        width: 200,
+        height: 200,
+        colorDark: '#1E3A8A',
+        colorLight: '#ffffff'
+      });
+    } else {
+      qrEl.textContent = 'QR library failed to load — use the link below.';
     }
   }
 
-  document.addEventListener('DOMContentLoaded', loadProducts);
+  function closeBookingModal(){
+    document.getElementById('bookingModal').classList.remove('open');
+  }
+
+  document.getElementById('bookingModal').addEventListener('click', function(e){
+    if(e.target === this) closeBookingModal();
+  });
+
+  // ---- Enlarged product image lightbox ----
+  function openLightbox(src, name){
+    if (!src) return;
+    var img = document.getElementById('lightboxImg');
+    img.src = src;
+    img.alt = name || '';
+    document.getElementById('imageLightbox').classList.add('open');
+  }
+
+  function closeLightbox(){
+    document.getElementById('imageLightbox').classList.remove('open');
+    document.getElementById('lightboxImg').src = '';
+  }
+
+  document.getElementById('imageLightbox').addEventListener('click', function(e){
+    if(e.target === this) closeLightbox();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeLightbox();
+  });
 </script>
 
 </body>
