@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gargi AstroVastu</title>
 <meta name="description" content="Gargi AstroVastu — Vedic astrology (Kundali), Numerology and Vastu Shastra consultations.">
-<link rel="icon" type="image/png" href="gargi-astrovastu.png">
+<link rel="icon" type="image/png" href="gargi-mark.png">
 
 <!--
   ============================================================
@@ -177,13 +177,15 @@
   .collections-row{
     display:flex; flex-wrap:wrap; justify-content:center; gap:32px 26px;
   }
-  .collection-item{ width:150px; text-align:center; }
+  .collection-item{ width:150px; text-align:center; display:block; text-decoration:none; cursor:pointer; }
+  .collection-item:hover .collection-circle{ transform:translateY(-3px); box-shadow:0 8px 20px rgba(30,58,138,0.18); }
+  .collection-item:hover .name{ color:var(--blue); }
   .collection-circle{
     width:150px; height:150px; border-radius:50%; overflow:hidden;
     background:rgba(30,58,138,0.06); border:1px dashed rgba(30,58,138,0.25);
     display:flex; align-items:center; justify-content:center;
     color:var(--blue); opacity:0.55; font-size:0.8rem; text-align:center; padding:10px;
-    margin:0 auto 12px;
+    margin:0 auto 12px; transition:transform .15s ease, box-shadow .15s ease;
   }
   .collection-circle img{ width:100%; height:100%; object-fit:cover; }
   .collection-item .name{ font-size:0.95rem; color:var(--ink); }
@@ -237,7 +239,7 @@
 <header class="site-header">
   <div class="nav-wrap">
     <a href="#top" class="brand">
-      <img class="g-mark" src="gargi-astrovastu.png" alt="Gargi AstroVastu logo" onerror="this.style.display='none'">
+      <img class="g-mark" src="gargi-mark.png" alt="Gargi AstroVastu logo" onerror="this.style.display='none'">
       Gargi AstroVastu
     </a>
     <button class="menu-toggle" onclick="document.querySelector('nav.links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
@@ -308,18 +310,18 @@
     <h2>Our Collections</h2>
     <div class="collections-row" id="collectionsRow">
       <!-- Placeholder circles shown until collections.csv loads (or if it's empty) -->
-      <div class="collection-item">
+      <a class="collection-item" href="products.html#cat-vastu-remedy-items">
         <div class="collection-circle">Photo needed</div>
         <div class="name">Vastu Remedy Items</div>
-      </div>
-      <div class="collection-item">
+      </a>
+      <a class="collection-item" href="products.html#cat-bracelets">
         <div class="collection-circle">Photo needed</div>
         <div class="name">Bracelets</div>
-      </div>
-      <div class="collection-item">
+      </a>
+      <a class="collection-item" href="products.html#cat-rudraksha">
         <div class="collection-circle">Photo needed</div>
         <div class="name">Rudraksha</div>
-      </div>
+      </a>
     </div>
   </section>
 
@@ -447,12 +449,19 @@
   loadTestimonialsFromCsv();
 
   // ---- Collections from collections.csv (edit it like a spreadsheet) ----
+  // Same slugify rule products.html uses for its category section ids, so a
+  // collection circle here links straight to the matching section there.
+  function slugify(text){
+    return 'cat-' + text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+
   function renderCollections(items){
     var row = document.getElementById('collectionsRow');
     row.innerHTML = '';
     items.forEach(function(item){
-      var wrap = document.createElement('div');
+      var wrap = document.createElement('a');
       wrap.className = 'collection-item';
+      wrap.href = 'products.html#' + slugify(item.name);
 
       var circle = document.createElement('div');
       circle.className = 'collection-circle';
