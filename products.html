@@ -99,17 +99,29 @@
   }
   .cat-link:hover{ background:var(--blue); color:#fff; }
 
-  section.category-section{ max-width:var(--maxw); margin:0 auto; padding:32px 20px 48px; }
+  section.category-section{ max-width:var(--maxw); margin:0 auto; padding:24px 20px 36px; }
   section.category-section h2{
     font-size:1.8rem; border-bottom:2px solid rgba(201,162,39,0.3);
-    padding-bottom:8px; margin-bottom:24px;
+    padding-bottom:8px; margin-bottom:20px;
   }
 
+  /* Horizontal Scrollable Carousel Row */
   .product-grid{
-    display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:24px;
+    display:flex;
+    gap:20px;
+    overflow-x:auto;
+    padding-bottom:16px;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;
+    scrollbar-color:var(--gold) transparent;
   }
+  .product-grid::-webkit-scrollbar { height:6px; }
+  .product-grid::-webkit-scrollbar-thumb { background:var(--gold); border-radius:10px; }
 
   .product-card{
+    flex:0 0 280px;
+    scroll-snap-align:start;
     background:#fff; border:1px solid rgba(30,58,138,0.12); border-radius:12px;
     overflow:hidden; display:flex; flex-direction:column; justify-content:space-between;
     transition:transform .15s ease, box-shadow .15s ease;
@@ -118,7 +130,8 @@
   
   .product-image{
     width:100%; height:220px; background:rgba(30,58,138,0.04);
-    display:flex; align-items:center; justify-content:center; overflow:hidden; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+    text-align:center; padding:12px; color:var(--blue); font-size:0.95rem; font-weight:600;
   }
   .product-image img{ width:100%; height:100%; object-fit:cover; }
   
@@ -268,7 +281,7 @@
           return `
             <div class="product-card">
               <div class="product-image">
-                <img src="${item.Image}" alt="${item.Name}" onerror="this.parentElement.textContent='${item.Name}'">
+                <img src="${item.Image}" alt="${item.Name}" onerror="this.remove(); this.parentElement.innerHTML='<span>${item.Name}</span>';">
               </div>
               <div class="product-info">
                 <h3 class="product-title">${item.Name}</h3>
@@ -281,16 +294,16 @@
           `;
         }).join('');
 
-        // Dynamic Poster End Cards Insertion
+        // Placeholder poster cards
         if (categoryName === "Vastu Remedy Items") {
           itemsHTML += `
             <div class="product-card cta-poster-card">
               <div class="product-image">
-                <img src="product-images/laxmi-yantra-pyramid.jpg" alt="Custom Vastu Remedies" onerror="this.parentElement.textContent='Custom Vastu Remedies'">
+                <span>Custom Vastu Remedies</span>
               </div>
               <div class="product-info">
                 <h3 class="product-title">Custom &amp; Extended Remedies</h3>
-                <p style="font-size:0.88rem; opacity:0.85; margin-bottom:16px;">Looking for specific Pyramids, Yantras, Crystal Gemstone Trees, or custom-tailored remedies for your space?</p>
+                <p style="font-size:0.88rem; opacity:0.85; margin-bottom:16px;">Looking for specific Pyramids, Yantras, Gemstone Trees, or custom space remedies?</p>
                 <a href="https://wa.me/${window.GARGI_CONFIG.whatsappNumber}?text=Namaste%20Gargi%20Ji%2C%20I%20am%20inquiring%20about%20Custom%20and%20Extended%20Vastu%20Remedies." class="btn btn-primary" target="_blank" rel="noopener">Inquire via WhatsApp</a>
               </div>
             </div>
@@ -299,11 +312,11 @@
           itemsHTML += `
             <div class="product-card cta-poster-card">
               <div class="product-image">
-                <img src="product-images/bracelets-collection.jpg" alt="Custom Spiritual Jewelry" onerror="this.parentElement.textContent='Custom Spiritual Jewelry'">
+                <span>Bespoke Spiritual Jewelry</span>
               </div>
               <div class="product-info">
                 <h3 class="product-title">Bespoke Spiritual Jewelry</h3>
-                <p style="font-size:0.88rem; opacity:0.85; margin-bottom:16px;">Need specific gemstones, custom mala combinations, or energized protection items tailored to your Kundali?</p>
+                <p style="font-size:0.88rem; opacity:0.85; margin-bottom:16px;">Need specific gemstones, custom mala combinations, or energized protection items?</p>
                 <a href="https://wa.me/${window.GARGI_CONFIG.whatsappNumber}?text=Namaste%20Gargi%20Ji%2C%20I%20am%20inquiring%20about%20Custom%20Spiritual%20Jewelry." class="btn btn-primary" target="_blank" rel="noopener">Inquire via WhatsApp</a>
               </div>
             </div>
