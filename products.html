@@ -53,7 +53,7 @@
   a{ color:inherit; }
   img{ max-width:100%; display:block; }
 
-  /* ---------- Nav ---------- */
+  /* Header / Nav */
   header.site-header{
     position:sticky; top:0; z-index:50;
     background:rgba(253,251,245,0.96);
@@ -81,7 +81,7 @@
     }
   }
 
-  /* ---------- Header / Hero ---------- */
+  /* Page Layout */
   .page-hero{
     max-width:var(--maxw); margin:0 auto;
     padding:48px 20px 24px; text-align:center;
@@ -89,7 +89,6 @@
   .page-hero h1{ font-size:2.4rem; }
   .page-hero p{ max-width:600px; margin:0 auto; opacity:0.8; font-size:1.05rem; }
 
-  /* Category Sticky Filter Nav */
   .cat-nav{
     display:flex; justify-content:center; gap:12px; flex-wrap:wrap;
     margin:24px 0 36px; padding:0 20px;
@@ -100,7 +99,6 @@
   }
   .cat-link:hover{ background:var(--blue); color:#fff; }
 
-  /* ---------- Products Section ---------- */
   section.category-section{ max-width:var(--maxw); margin:0 auto; padding:32px 20px 48px; }
   section.category-section h2{
     font-size:1.8rem; border-bottom:2px solid rgba(201,162,39,0.3);
@@ -119,15 +117,17 @@
   .product-card:hover{ transform:translateY(-3px); box-shadow:0 8px 20px rgba(30,58,138,0.12); }
   
   .product-image{
-    width:100%; height:200px; background:rgba(30,58,138,0.04);
-    display:flex; align-items:center; justify-content:center; overflow:hidden;
+    width:100%; height:220px; background:rgba(30,58,138,0.04);
+    display:flex; align-items:center; justify-content:center; overflow:hidden; cursor:pointer;
   }
   .product-image img{ width:100%; height:100%; object-fit:cover; }
   
   .product-info{ padding:18px; display:flex; flex-direction:column; flex-grow:1; }
-  .product-title{ font-size:1.2rem; margin-bottom:6px; color:var(--blue); }
-  .product-price{ font-weight:600; color:var(--gold); font-size:1.05rem; margin-bottom:10px; }
-  .product-desc{ font-size:0.9rem; opacity:0.8; margin-bottom:16px; flex-grow:1; }
+  .product-title{ font-size:1.2rem; margin-bottom:4px; color:var(--blue); }
+  .product-tagline{ font-size:0.85rem; color:var(--gold); font-weight:600; margin-bottom:8px; }
+  .product-price{ font-weight:600; color:var(--ink); font-size:1rem; margin-bottom:12px; }
+  .product-benefits{ font-size:0.85rem; opacity:0.85; margin:0 0 16px 0; padding-left:18px; flex-grow:1; }
+  .product-benefits li{ margin-bottom:4px; }
   
   .btn{
     display:inline-block; text-align:center; padding:9px 18px; border-radius:999px;
@@ -137,13 +137,13 @@
   .btn-primary{ background:var(--blue); color:#fff; }
   .btn-primary:hover{ background:var(--blue-dark); }
 
-  /* ---------- Poster CTA Card ---------- */
+  /* Custom Poster Card Styling */
   .cta-poster-card{
     background:linear-gradient(145deg, #ffffff 0%, #fdf9ed 100%);
     border:2px dashed var(--gold);
   }
-  .cta-poster-card .product-title{ color:var(--blue); font-size:1.3rem; }
-  .cta-poster-card .btn{ width:100%; margin-top: auto; }
+  .cta-poster-card .product-title{ color:var(--blue); font-size:1.25rem; }
+  .cta-poster-card .btn{ width:100%; margin-top:auto; }
 
   footer{ text-align:center; padding:30px 20px; font-size:0.85rem; opacity:0.6; border-top:1px solid rgba(30,58,138,0.12); margin-top:40px; }
   .social-row{ display:flex; justify-content:center; gap:18px; margin-bottom:14px; opacity:1; }
@@ -184,103 +184,9 @@
     </div>
   </div>
 
-  <!-- Vastu Remedy Items -->
-  <section id="cat-vastu-remedy-items" class="category-section">
-    <h2>Vastu Remedy Items</h2>
-    <div class="product-grid">
-      
-      <!-- Feature Item 1: Laxmi Yantra Pyramid -->
-      <div class="product-card">
-        <div class="product-image">
-          <img src="laxmi-yantra-pyramid.jpg" alt="Laxmi Yantra Orgone Pyramid" onerror="this.parentElement.textContent='Image: Laxmi Yantra Pyramid'">
-        </div>
-        <div class="product-info">
-          <h3 class="product-title">Laxmi Yantra Orgone Pyramid</h3>
-          <div class="product-price">Price on Request</div>
-          <p class="product-desc">Energized wealth pyramid featuring sacred geometry, cowrie shells, and natural crystals designed for financial prosperity and space cleansing.</p>
-          <a href="https://wa.me/918329566105?text=Namaste%20Gargi%20Ji%2C%20I%20am%20interested%20in%20the%20Laxmi%20Yantra%20Pyramid." class="btn btn-primary" target="_blank" rel="noopener">Inquire via WhatsApp</a>
-        </div>
-      </div>
-
-      <!-- Feature Item 2: Crystal Gemstone Tree -->
-      <div class="product-card">
-        <div class="product-image">
-          <img src="crystal-gem-tree.jpg" alt="7-Chakra Gemstone Tree" onerror="this.parentElement.textContent='Image: Gemstone Tree'">
-        </div>
-        <div class="product-info">
-          <h3 class="product-title">7-Chakra Gemstone Tree</h3>
-          <div class="product-price">Price on Request</div>
-          <p class="product-desc">Harmonizing crystal decor piece crafted with natural gemstones to radiate positive vibes and balance environmental energies.</p>
-          <a href="https://wa.me/918329566105?text=Namaste%20Gargi%20Ji%2C%20I%20am%20interested%20in%20the%207-Chakra%20Gemstone%20Tree." class="btn btn-primary" target="_blank" rel="noopener">Inquire via WhatsApp</a>
-        </div>
-      </div>
-
-      <!-- Custom End Card Poster for Vastu Section -->
-      <div class="product-card cta-poster-card">
-        <div class="product-image">
-          <img src="laxmi-yantra-pyramid.jpg" alt="Custom Vastu Remedies" onerror="this.parentElement.textContent='Custom Vastu Remedies'">
-        </div>
-        <div class="product-info">
-          <h3 class="product-title">Custom &amp; Extended Remedies</h3>
-          <p class="product-desc">Looking for specific Yantras, Pyramids, Crystal Trees, or custom-energized items tailored for your space?</p>
-          <a href="https://wa.me/918329566105?text=Namaste%20Gargi%20Ji%2C%20I%20would%20like%20to%20inquire%20about%20Custom%20and%20Extended%20Vastu%20Remedies." class="btn btn-primary" target="_blank" rel="noopener">Inquire via WhatsApp</a>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Spiritual Jewelry -->
-  <section id="cat-spiritual-jewelry" class="category-section">
-    <h2>Spiritual Jewelry</h2>
-    <div class="product-grid">
-      
-      <div class="product-card">
-        <div class="product-image">
-          <img src="bracelet.jpg" alt="Energized Gemstone Bracelet" onerror="this.parentElement.textContent='Image: Spiritual Bracelet'">
-        </div>
-        <div class="product-info">
-          <h3 class="product-title">7-Chakra Healing Bracelet</h3>
-          <div class="product-price">Price on Request</div>
-          <p class="product-desc">Natural gemstone bead bracelet charged to align chakras and promote mental clarity and daily protection.</p>
-          <a href="https://wa.me/918329566105?text=Namaste%20Gargi%20Ji%2C%20I%20am%20interested%20in%20Spiritual%20Jewelry." class="btn btn-primary" target="_blank" rel="noopener">Inquire via WhatsApp</a>
-        </div>
-      </div>
-
-      <!-- Custom End Card Poster for Spiritual Jewelry Section -->
-      <div class="product-card cta-poster-card">
-        <div class="product-image">
-          <img src="bracelet.jpg" alt="Bespoke Spiritual Jewelry" onerror="this.parentElement.textContent='Bespoke Jewelry'">
-        </div>
-        <div class="product-info">
-          <h3 class="product-title">Custom Spiritual Jewelry</h3>
-          <p class="product-desc">Need specific planetary gemstones, mala combinations, or energized protection items customized to your Kundali?</p>
-          <a href="https://wa.me/918329566105?text=Namaste%20Gargi%20Ji%2C%20I%20would%20like%20to%20inquire%20about%20custom-tailored%20Spiritual%20Jewelry." class="btn btn-primary" target="_blank" rel="noopener">Inquire via WhatsApp</a>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Rudraksha -->
-  <section id="cat-rudraksha" class="category-section">
-    <h2>Rudraksha</h2>
-    <div class="product-grid">
-      
-      <div class="product-card">
-        <div class="product-image">
-          <img src="rudraksha.jpg" alt="Natural Mukhi Rudraksha" onerror="this.parentElement.textContent='Image: Rudraksha'">
-        </div>
-        <div class="product-info">
-          <h3 class="product-title">Authentic Mukhi Rudraksha</h3>
-          <div class="product-price">Price on Request</div>
-          <p class="product-desc">100% natural, lab-certified Rudraksha beads selected according to individual astrological planetary positions.</p>
-          <a href="https://wa.me/918329566105?text=Namaste%20Gargi%20Ji%2C%20I%20am%20interested%20in%20Rudraksha%20recommendations." class="btn btn-primary" target="_blank" rel="noopener">Inquire via WhatsApp</a>
-        </div>
-      </div>
-
-    </div>
-  </section>
+  <div id="products-container">
+    <!-- Products rendered dynamically via CSV -->
+  </div>
 </main>
 
 <footer>
@@ -300,6 +206,122 @@
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // CSV Parser
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim());
+    const results = [];
+    
+    for (let i = 1; i < lines.length; i++) {
+      if (!lines[i].trim()) continue;
+      const row = [];
+      let inQuotes = false;
+      let current = '';
+      
+      for (let char of lines[i]) {
+        if (char === '"' || char === "'") {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          row.push(current.trim().replace(/^["']|["']$/g, ''));
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      row.push(current.trim().replace(/^["']|["']$/g, ''));
+      
+      const item = {};
+      headers.forEach((h, idx) => { item[h] = row[idx] || ''; });
+      results.push(item);
+    }
+    return results;
+  }
+
+  // Render Engine
+  async function loadProducts() {
+    try {
+      const response = await fetch(window.GARGI_CONFIG.productsFile);
+      const text = await response.text();
+      const products = parseCSV(text);
+      
+      const categories = {};
+      products.forEach(p => {
+        const cat = p.Category || 'Other';
+        if (!categories[cat]) categories[cat] = [];
+        categories[cat].push(p);
+      });
+
+      const container = document.getElementById('products-container');
+      container.innerHTML = '';
+
+      for (const [categoryName, items] of Object.entries(categories)) {
+        const section = document.createElement('section');
+        const catId = 'cat-' + categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        section.className = 'category-section';
+        section.id = catId;
+
+        let itemsHTML = items.map(item => {
+          const benefitsList = item.Benefits ? item.Benefits.split('|').map(b => `<li>${b.trim()}</li>`).join('') : '';
+          const waMsg = encodeURIComponent(item.WhatsAppMessage || `Namaste, I am interested in ${item.Name}`);
+          
+          return `
+            <div class="product-card">
+              <div class="product-image">
+                <img src="${item.Image}" alt="${item.Name}" onerror="this.parentElement.textContent='${item.Name}'">
+              </div>
+              <div class="product-info">
+                <h3 class="product-title">${item.Name}</h3>
+                ${item.Tagline ? `<div class="product-tagline">${item.Tagline}</div>` : ''}
+                <div class="product-price">${item.Price}</div>
+                ${benefitsList ? `<ul class="product-benefits">${benefitsList}</ul>` : ''}
+                <a href="https://wa.me/${window.GARGI_CONFIG.whatsappNumber}?text=${waMsg}" class="btn btn-primary" target="_blank" rel="noopener">Inquire via WhatsApp</a>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Dynamic Poster End Cards Insertion
+        if (categoryName === "Vastu Remedy Items") {
+          itemsHTML += `
+            <div class="product-card cta-poster-card">
+              <div class="product-image">
+                <img src="product-images/laxmi-yantra-pyramid.jpg" alt="Custom Vastu Remedies" onerror="this.parentElement.textContent='Custom Vastu Remedies'">
+              </div>
+              <div class="product-info">
+                <h3 class="product-title">Custom &amp; Extended Remedies</h3>
+                <p style="font-size:0.88rem; opacity:0.85; margin-bottom:16px;">Looking for specific Pyramids, Yantras, Crystal Gemstone Trees, or custom-tailored remedies for your space?</p>
+                <a href="https://wa.me/${window.GARGI_CONFIG.whatsappNumber}?text=Namaste%20Gargi%20Ji%2C%20I%20am%20inquiring%20about%20Custom%20and%20Extended%20Vastu%20Remedies." class="btn btn-primary" target="_blank" rel="noopener">Inquire via WhatsApp</a>
+              </div>
+            </div>
+          `;
+        } else if (categoryName === "Spiritual Jewelry") {
+          itemsHTML += `
+            <div class="product-card cta-poster-card">
+              <div class="product-image">
+                <img src="product-images/bracelets-collection.jpg" alt="Custom Spiritual Jewelry" onerror="this.parentElement.textContent='Custom Spiritual Jewelry'">
+              </div>
+              <div class="product-info">
+                <h3 class="product-title">Bespoke Spiritual Jewelry</h3>
+                <p style="font-size:0.88rem; opacity:0.85; margin-bottom:16px;">Need specific gemstones, custom mala combinations, or energized protection items tailored to your Kundali?</p>
+                <a href="https://wa.me/${window.GARGI_CONFIG.whatsappNumber}?text=Namaste%20Gargi%20Ji%2C%20I%20am%20inquiring%20about%20Custom%20Spiritual%20Jewelry." class="btn btn-primary" target="_blank" rel="noopener">Inquire via WhatsApp</a>
+              </div>
+            </div>
+          `;
+        }
+
+        section.innerHTML = `
+          <h2>${categoryName}</h2>
+          <div class="product-grid">${itemsHTML}</div>
+        `;
+        container.appendChild(section);
+      }
+    } catch (err) {
+      console.error("Error parsing product CSV:", err);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadProducts);
 </script>
 
 </body>
