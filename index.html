@@ -35,31 +35,9 @@
     youtubeUrl: "https://www.youtube.com/@GargiAstroVastu",
 
     // ---- Testimonials, edited as a spreadsheet in the repo ----
-    // Testimonials live in testimonials.csv, right next to this file. Open
-    // it in Excel/Google Sheets/Numbers (or GitHub's own table preview),
-    // edit like any spreadsheet, save/export as CSV, re-upload to the repo.
-    // Two columns only: Name, Quote. Keep the header row as-is.
-    //
-    // To add a testimonial without any spreadsheet app at all:
-    //   1. On GitHub, open testimonials.csv in the repo.
-    //   2. Click the pencil (Edit) icon — it's a plain table there too.
-    //   3. Add a new line: Name,"Quote text here" (wrap the quote in
-    //      double quotes if it contains a comma).
-    //   4. Commit the change.
-    //   5. GitHub Pages redeploys automatically, usually within a minute.
-    //      Reload the live site after that and the new testimonial is there.
-    // No HTML/CSS/JS editing needed for this — ever.
     testimonialsFile: "testimonials.csv",
 
     // ---- Collections, edited as a spreadsheet in the repo ----
-    // Collections live in collections.csv, right next to this file — same
-    // spreadsheet-editing workflow as testimonials.csv above.
-    // Two columns: Name, Image.
-    //   - Image: filename of a photo uploaded to the repo, cropped to a
-    //     circle automatically by the page. RECOMMENDED: a square photo,
-    //     600x600px or larger, JPG, under ~250KB, with the product centered
-    //     (the circle crop cuts off the corners, so keep the subject in the
-    //     middle third of the frame). Leave blank for a placeholder circle.
     collectionsFile: "collections.csv"
   };
 </script>
@@ -76,7 +54,7 @@
     --blue:#1E3A8A;
     --blue-dark:#152a63;
     --gold:#C9A227;
-    --cream:#FFFFFF;
+    --cream:#FDFBF5;
     --ink:#2A2A2A;
     --maxw:1100px;
   }
@@ -101,7 +79,7 @@
   /* ---------- Nav ---------- */
   header.site-header{
     position:sticky; top:0; z-index:50;
-    background:rgba(255,255,255,0.96);
+    background:rgba(253,251,245,0.96);
     backdrop-filter:blur(6px);
     border-bottom:1px solid rgba(30,58,138,0.12);
   }
@@ -191,7 +169,7 @@
     width:150px; height:150px; border-radius:50%; overflow:hidden;
     background:rgba(30,58,138,0.06); border:1px dashed rgba(30,58,138,0.25);
     display:flex; align-items:center; justify-content:center;
-    color:var(--blue); opacity:0.55; font-size:0.8rem; text-align:center; padding:10px;
+    color:var(--blue); font-size:0.8rem; text-align:center; padding:10px;
     margin:0 auto 12px; transition:transform .15s ease, box-shadow .15s ease;
   }
   .collection-circle img{ width:100%; height:100%; object-fit:cover; }
@@ -377,9 +355,6 @@
   document.getElementById('socialFacebook').href = window.GARGI_CONFIG.facebookUrl;
   document.getElementById('socialYoutube').href = window.GARGI_CONFIG.youtubeUrl;
 
-  // ---- Testimonials from testimonials.csv (edit it like a spreadsheet) ----
-  // Minimal CSV line parser: handles quoted fields and escaped ("") quotes,
-  // which is all a spreadsheet export needs.
   function parseCsv(text){
     var rows = [];
     var row = [];
@@ -429,7 +404,7 @@
 
   function loadTestimonialsFromCsv(){
     var url = window.GARGI_CONFIG.testimonialsFile;
-    if (!url) return; // keep the placeholder cards already in the HTML
+    if (!url) return;
 
     fetch(url, { cache: 'no-store' })
       .then(function(res){
@@ -439,13 +414,11 @@
       .then(function(csvText){
         var rows = parseCsv(csvText);
         if (!rows.length) return;
-        var dataRows = rows.slice(1); // first row is the "Name,Quote" header
+        var dataRows = rows.slice(1);
         var items = dataRows
           .map(function(r){ return { name: (r[0] || '').trim(), quote: (r[1] || '').trim() }; })
           .filter(function(item){ return item.name && item.quote; });
         if (items.length) renderTestimonials(items);
-        // If the file is reachable but empty, leave the placeholders showing
-        // rather than blanking the section.
       })
       .catch(function(err){
         console.warn('Could not load testimonials.csv, showing placeholders instead:', err);
@@ -454,9 +427,6 @@
 
   loadTestimonialsFromCsv();
 
-  // ---- Collections from collections.csv (edit it like a spreadsheet) ----
-  // Same slugify rule products.html uses for its category section ids, so a
-  // collection circle here links straight to the matching section there.
   function slugify(text){
     return 'cat-' + text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   }
@@ -494,7 +464,7 @@
 
   function loadCollectionsFromCsv(){
     var url = window.GARGI_CONFIG.collectionsFile;
-    if (!url) return; // keep the placeholder circles already in the HTML
+    if (!url) return;
 
     fetch(url, { cache: 'no-store' })
       .then(function(res){
@@ -504,7 +474,7 @@
       .then(function(csvText){
         var rows = parseCsv(csvText);
         if (!rows.length) return;
-        var dataRows = rows.slice(1); // header: Name,Image
+        var dataRows = rows.slice(1);
         var items = dataRows
           .map(function(r){ return { name: (r[0] || '').trim(), image: (r[1] || '').trim() }; })
           .filter(function(item){ return item.name; });
