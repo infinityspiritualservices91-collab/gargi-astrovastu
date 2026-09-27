@@ -88,7 +88,7 @@
   }
   .brand{ display:flex; align-items:center; gap:10px; font-size:1.4rem; font-weight:700; text-decoration:none; }
   .brand .g-mark{ width:36px; height:36px; object-fit:contain; }
-  nav.links{ display:flex; gap:28px; font-size:0.98rem; }
+  nav.links{ display:flex; gap:24px; font-size:0.98rem; }
   nav.links a{ text-decoration:none; color:var(--ink); opacity:0.85; transition:color .15s; }
   nav.links a:hover, nav.links a.current{ color:var(--blue); opacity:1; font-weight:600; }
   .menu-toggle{ display:none; background:none; border:none; font-size:1.6rem; color:var(--blue); cursor:pointer; padding:4px 8px; }
@@ -119,11 +119,14 @@
   .btn-primary:hover{ background:var(--blue-dark); }
   .btn-gold{ background:var(--gold); border-color:var(--gold); color:#fff; }
   .btn-small{ padding:8px 16px; font-size:0.88rem; }
+  .btn-outline{ background:transparent; border-color:rgba(30,58,138,0.3); color:var(--blue); }
+  .btn-outline:hover{ border-color:var(--blue); background:rgba(30,58,138,0.05); }
 
   /* ---------- Page Hero ---------- */
-  .page-hero{ max-width:var(--maxw); margin:0 auto; padding:36px 20px 12px; text-align:center; }
+  .page-hero{ max-width:var(--maxw); margin:0 auto; padding:32px 20px 12px; text-align:center; }
   .page-hero h1{ font-size:2.2rem; }
   .page-hero .sub{ font-size:1.05rem; opacity:0.8; margin-top:4px; }
+  .page-hero .hero-actions{ margin-top:14px; }
 
   /* ---------- Products: Category Rows ---------- */
   #categoriesContainer{ max-width:var(--maxw); margin:0 auto; padding:16px 20px 40px; }
@@ -255,6 +258,7 @@
     </a>
     <button class="menu-toggle" onclick="document.querySelector('nav.links').classList.toggle('open')" aria-label="Toggle Menu">&#9776;</button>
     <nav class="links">
+      <a href="index.html">Home</a>
       <a href="index.html#services">Services</a>
       <a href="products.html" class="current">Products</a>
       <a href="index.html#testimonials">Testimonials</a>
@@ -267,6 +271,9 @@
   <div class="page-hero">
     <h1>Our Products</h1>
     <p class="sub">Vastu remedies and authentic energised items for your home and personal space.</p>
+    <div class="hero-actions">
+      <a href="index.html" class="btn btn-small btn-outline">&lsaquo; Back to Home</a>
+    </div>
   </div>
 
   <!-- Category rows loaded dynamically from products.csv -->
