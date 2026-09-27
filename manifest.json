@@ -1,0 +1,21 @@
+{
+  "name": "Gargi AstroVastu",
+  "short_name": "AstroVastu",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#FDFBF5",
+  "theme_color": "#1E3A8A",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "gargi-astrovastu.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "gargi-astrovastu.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
