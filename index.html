@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <script>
   // Always land at the top on a refresh/reload, regardless of scroll
   // position or a leftover #hash from an earlier visit.
@@ -12,6 +12,8 @@
 <title>Gargi AstroVastu</title>
 <meta name="description" content="Gargi AstroVastu — Vedic astrology (Kundali), Numerology and Vastu Shastra consultations.">
 <link rel="icon" type="image/png" href="gargi-astrovastu.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1E3A8A">
 
 <!--
   ============================================================
@@ -76,6 +78,7 @@
     font-family:'Source Serif 4', Georgia, serif;
     line-height:1.6;
     -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
   h1,h2,h3,.brand{
     font-family:'Cormorant Garamond', Georgia, serif;
@@ -101,13 +104,8 @@
   .brand{ display:flex; align-items:center; gap:10px; font-size:1.5rem; font-weight:700; text-decoration:none; }
   .brand .g-mark{ width:40px; height:40px; object-fit:contain; }
   nav.links{ display:flex; gap:28px; font-size:0.98rem; }
-  nav.links a{ text-decoration:none; color:var(--ink); opacity:0.85; }
+  nav.links a{ text-decoration:none; color:var(--ink); opacity:0.85; padding:6px 0; }
   nav.links a:hover{ color:var(--blue); opacity:1; }
-  .nav-cta{
-    background:var(--blue); color:#fff; padding:9px 18px; border-radius:999px;
-    font-size:0.92rem; text-decoration:none; border:1px solid var(--blue);
-  }
-  .nav-cta:hover{ background:var(--blue-dark); }
 
   /* Clear Mobile Menu Toggle Button */
   .menu-toggle{ 
@@ -115,14 +113,15 @@
     background:var(--blue); 
     color:#ffffff; 
     border:1px solid var(--gold); 
-    padding:6px 14px; 
+    padding:8px 16px; 
     border-radius:20px; 
     font-family:'Source Serif 4', Georgia, serif; 
-    font-size:0.88rem; 
+    font-size:0.9rem; 
     font-weight:600; 
     cursor:pointer; 
     align-items:center; 
     gap:6px;
+    min-height:44px;
     transition:var(--transition);
   }
   .menu-toggle:hover, .menu-toggle:active{
@@ -151,17 +150,18 @@
     }
     nav.links.open{ display:flex; }
     nav.links a{
-      padding:10px 0;
+      padding:12px 0;
       font-size:1.05rem;
       border-bottom:1px solid rgba(30,58,138,0.08);
     }
 
-    /* Fixed Bottom Navigation Bar on Mobile */
+    /* Fixed Bottom Navigation Bar on Mobile with Safe Area Padding */
     .mobile-bottom-nav {
       display:flex;
       position:fixed;
       bottom:0; left:0; right:0;
-      height:60px;
+      height:calc(60px + env(safe-area-inset-bottom, 0px));
+      padding-bottom:env(safe-area-inset-bottom, 0px);
       background:var(--blue-dark);
       border-top:1px solid var(--gold);
       z-index:90;
@@ -176,63 +176,62 @@
       display:flex;
       flex-direction:column;
       align-items:center;
+      justify-content:center;
       gap:2px;
+      flex:1;
+      height:100%;
     }
     .mobile-bottom-nav a span {
-      font-size:1.1rem;
-    }
-    .mobile-bottom-nav a.active {
-      color:var(--gold);
-      font-weight:600;
+      font-size:1.15rem;
     }
 
     main {
-      padding-bottom:70px; /* Prevents sticky bottom bar from covering footer/content */
+      padding-bottom:80px; /* Prevents sticky bottom bar from covering footer/content */
     }
   }
 
   /* ---------- Hero ---------- */
   .hero{
     max-width:var(--maxw); margin:0 auto;
-    padding:64px 20px 48px; text-align:center;
+    padding:48px 20px 36px; text-align:center;
   }
-  .hero .tagline-mr{ font-size:1.15rem; color:var(--gold); margin-bottom:8px; }
-  .hero h1{ font-size:2.6rem; }
-  .hero p.sub{ max-width:620px; margin:14px auto 28px; font-size:1.08rem; opacity:0.85; }
+  .hero h1{ font-size:2.4rem; }
+  .hero p.sub{ max-width:620px; margin:14px auto 28px; font-size:1.05rem; opacity:0.85; }
   .btn{
     display:inline-block; padding:12px 24px; border-radius:999px;
     font-family:'Source Serif 4', serif; font-size:0.95rem; text-decoration:none;
     cursor:pointer; border:1.5px solid var(--blue); transition:transform .15s ease, background-color .15s ease;
+    min-height:44px;
   }
   .btn:hover{ transform:translateY(-1px); }
   .btn-primary{ background:var(--blue); color:#fff; }
   .btn-primary:hover{ background:var(--blue-dark); }
   .btn-gold{ background:var(--gold); border-color:var(--gold); color:#fff; }
-  .btn-sm{ padding:8px 18px; font-size:0.88rem; margin-top:14px; }
+  .btn-sm{ padding:10px 20px; font-size:0.9rem; margin-top:14px; }
 
-  section{ max-width:var(--maxw); margin:0 auto; padding:56px 20px; }
-  section h2{ font-size:2rem; text-align:center; margin-bottom:8px; }
-  .section-sub{ text-align:center; opacity:0.7; margin-bottom:36px; }
+  section{ max-width:var(--maxw); margin:0 auto; padding:44px 20px; }
+  section h2{ font-size:1.8rem; text-align:center; margin-bottom:8px; }
+  .section-sub{ text-align:center; opacity:0.7; margin-bottom:28px; }
 
   /* ---------- Services ---------- */
   .services-grid{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:22px;
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:20px;
   }
   .service-card{
     background:#fff; border:1px solid rgba(30,58,138,0.12); border-radius:14px;
-    padding:26px 22px; text-align:center; display:flex; flex-direction:column; justify-content:space-between;
+    padding:24px 20px; text-align:center; display:flex; flex-direction:column; justify-content:space-between;
   }
-  .service-card h3{ font-size:1.3rem; }
+  .service-card h3{ font-size:1.25rem; }
   .service-card .price{ color:var(--gold); font-weight:600; font-size:1.15rem; margin:8px 0; }
   .service-card p{ font-size:0.94rem; opacity:0.8; margin:0 0 12px 0; flex-grow:1; }
 
   /* ---------- Testimonials ---------- */
   .testimonial-grid{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:22px;
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px;
   }
   .testimonial-card{
     background:#fff; border-left:4px solid var(--gold); border-radius:8px;
-    padding:22px 24px; font-style:italic; font-size:0.98rem;
+    padding:20px 22px; font-style:italic; font-size:0.98rem;
     border-top:1px solid rgba(0,0,0,0.05); border-right:1px solid rgba(0,0,0,0.05); border-bottom:1px solid rgba(0,0,0,0.05);
   }
   .testimonial-card .who{ margin-top:14px; font-style:normal; font-weight:600; color:var(--blue); font-size:0.9rem; }
@@ -243,31 +242,31 @@
 
   /* ---------- Collections ---------- */
   .collections-row{
-    display:flex; flex-wrap:wrap; justify-content:center; gap:32px 26px;
+    display:flex; flex-wrap:wrap; justify-content:center; gap:24px 20px;
   }
-  .collection-item{ width:150px; text-align:center; display:block; text-decoration:none; cursor:pointer; }
+  .collection-item{ width:140px; text-align:center; display:block; text-decoration:none; cursor:pointer; }
   .collection-item:hover .collection-circle{ transform:translateY(-3px); box-shadow:0 8px 20px rgba(30,58,138,0.18); }
   .collection-item:hover .name{ color:var(--blue); }
   .collection-circle{
-    width:150px; height:150px; border-radius:50%; overflow:hidden;
+    width:130px; height:130px; border-radius:50%; overflow:hidden;
     background:rgba(30,58,138,0.06); border:1px dashed rgba(30,58,138,0.25);
     display:flex; align-items:center; justify-content:center;
     color:var(--blue); font-size:0.8rem; text-align:center; padding:10px;
     margin:0 auto 12px; transition:transform .15s ease, box-shadow .15s ease;
   }
   .collection-circle img{ width:100%; height:100%; object-fit:cover; }
-  .collection-item .name{ font-size:0.95rem; color:var(--ink); }
+  .collection-item .name{ font-size:0.95rem; color:var(--ink); font-weight:500; }
 
   /* ---------- Contact ---------- */
   .contact-box{
-    background:var(--blue); color:#fff; border-radius:18px; padding:40px 30px;
+    background:var(--blue); color:#fff; border-radius:18px; padding:36px 24px;
     text-align:center;
   }
   .contact-box h2{ color:#fff; }
   .contact-box .detail{ margin:6px 0; font-size:1.02rem; }
-  .contact-box .btn-gold{ margin-top:22px; }
+  .contact-box .btn-gold{ margin-top:20px; }
 
-  footer{ text-align:center; padding:30px 20px 80px; font-size:0.85rem; opacity:0.6; }
+  footer{ text-align:center; padding:30px 20px 90px; font-size:0.85rem; opacity:0.65; }
   @media (min-width: 761px) {
     footer { padding-bottom: 30px; }
   }
@@ -275,12 +274,12 @@
     display:flex; justify-content:center; gap:18px; margin-bottom:14px; opacity:1;
   }
   .social-row a{
-    width:38px; height:38px; border-radius:50%; border:1px solid rgba(30,58,138,0.25);
+    width:42px; height:42px; border-radius:50%; border:1px solid rgba(30,58,138,0.25);
     display:flex; align-items:center; justify-content:center; color:var(--blue);
     transition:background .15s ease, color .15s ease;
   }
   .social-row a:hover{ background:var(--blue); color:#fff; }
-  .social-row svg{ width:18px; height:18px; fill:currentColor; }
+  .social-row svg{ width:20px; height:20px; fill:currentColor; }
 
   /* ---------- QR Modal ---------- */
   .modal-overlay{
@@ -297,7 +296,7 @@
   #qrcode{ display:flex; justify-content:center; margin:0 auto 18px; }
   .modal-close{
     position:absolute; top:12px; right:14px; background:none; border:none;
-    font-size:1.4rem; color:var(--blue); cursor:pointer;
+    font-size:1.6rem; color:var(--blue); cursor:pointer; padding:8px;
   }
   #qrLink{
     display:inline-block; border-radius:12px; transition:transform .15s ease, box-shadow .15s ease;
@@ -314,7 +313,6 @@
       Gargi AstroVastu
     </a>
     
-    <!-- Labeled Menu Button for Mobile -->
     <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
       <span>&#9776;</span> <span>MENU</span>
     </button>
@@ -344,7 +342,7 @@
           <div class="price">₹501</div>
           <p>Kundali (birth chart) reading and interpretation.</p>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="openBookingModal(window.GARGI_CONFIG.whatsappServiceMessages.kundali)">Book Now</button>
+        <button class="btn btn-primary btn-sm" onclick="handleBooking(window.GARGI_CONFIG.whatsappServiceMessages.kundali)">Book Now</button>
       </div>
       <div class="service-card">
         <div>
@@ -352,7 +350,7 @@
           <div class="price">₹3,501</div>
           <p>Name and number analysis for personal and business decisions.</p>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="openBookingModal(window.GARGI_CONFIG.whatsappServiceMessages.numerology)">Book Now</button>
+        <button class="btn btn-primary btn-sm" onclick="handleBooking(window.GARGI_CONFIG.whatsappServiceMessages.numerology)">Book Now</button>
       </div>
       <div class="service-card">
         <div>
@@ -360,7 +358,7 @@
           <div class="price">₹3,000 x BHK</div>
           <p>On-site or plan-based Vastu review for homes and offices.</p>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="openBookingModal(window.GARGI_CONFIG.whatsappServiceMessages.vastu)">Book Now</button>
+        <button class="btn btn-primary btn-sm" onclick="handleBooking(window.GARGI_CONFIG.whatsappServiceMessages.vastu)">Book Now</button>
       </div>
       <div class="service-card">
         <div>
@@ -368,7 +366,7 @@
           <div class="price">On request</div>
           <p>Traditional pujas and remedies performed as advised.</p>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="openBookingModal(window.GARGI_CONFIG.whatsappServiceMessages.puja)">Book Now</button>
+        <button class="btn btn-primary btn-sm" onclick="handleBooking(window.GARGI_CONFIG.whatsappServiceMessages.puja)">Book Now</button>
       </div>
     </div>
   </section>
@@ -396,7 +394,6 @@
   <section id="collections">
     <h2>Our Collections</h2>
     <div class="collections-row" id="collectionsRow">
-      <!-- Placeholder circles shown until collections.csv loads (or if it's empty) -->
       <a class="collection-item" href="products.html#cat-vastu-remedy-items">
         <div class="collection-circle">Photo needed</div>
         <div class="name">Vastu Remedy Items</div>
@@ -416,12 +413,12 @@
     <div class="contact-box">
       <h2>Get in Touch</h2>
       <div class="detail" id="contact-phone-line">Phone: PLACEHOLDER</div>
-      <button class="btn btn-gold" onclick="openBookingModal()">Book a Consultation</button>
+      <button class="btn btn-gold" onclick="handleBooking()">Book a Consultation</button>
     </div>
   </section>
 </main>
 
-<!-- Fixed Mobile Bottom Bar (Thumb-friendly Navigation) -->
+<!-- Fixed Mobile Bottom Bar -->
 <div class="mobile-bottom-nav">
   <a href="#services">
     <span>✨</span> Services
@@ -432,7 +429,7 @@
   <a href="#contact">
     <span>📞</span> Contact
   </a>
-  <a href="#" onclick="openBookingModal(); return false;" style="color: #25D366; font-weight: bold;">
+  <a href="#" onclick="handleBooking(); return false;" style="color: #25D366; font-weight: bold;">
     <span>💬</span> WhatsApp
   </a>
 </div>
@@ -452,12 +449,12 @@
   &copy; <span id="year"></span> Gargi AstroVastu. All rights reserved.
 </footer>
 
-<!-- QR / WhatsApp booking modal -->
+<!-- Desktop QR Modal -->
 <div class="modal-overlay" id="bookingModal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeBookingModal()" aria-label="Close">&times;</button>
     <h3>Book a Consultation</h3>
-    <p class="hint">Scan with WhatsApp, or tap the code to open WhatsApp directly</p>
+    <p class="hint">Scan with WhatsApp, or click to open WhatsApp directly</p>
     <a href="#" id="qrLink" target="_blank" rel="noopener" aria-label="Open WhatsApp">
       <div id="qrcode"></div>
     </a>
@@ -467,14 +464,11 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Fill contact section from config
   document.getElementById('contact-phone-line').textContent = 'Phone: ' + window.GARGI_CONFIG.contactPhone;
-
   document.getElementById('socialInstagram').href = window.GARGI_CONFIG.instagramUrl;
   document.getElementById('socialFacebook').href = window.GARGI_CONFIG.facebookUrl;
   document.getElementById('socialYoutube').href = window.GARGI_CONFIG.youtubeUrl;
 
-  // Mobile menu helpers
   function toggleMobileMenu(){
     document.getElementById('mainNav').classList.toggle('open');
   }
@@ -482,7 +476,6 @@
     document.getElementById('mainNav').classList.remove('open');
   }
 
-  // Close menu when clicking outside
   document.addEventListener('click', function(e) {
     var nav = document.getElementById('mainNav');
     var toggleBtn = document.querySelector('.menu-toggle');
@@ -492,19 +485,14 @@
   });
 
   function parseCsv(text){
-    var rows = [];
-    var row = [];
-    var field = '';
-    var inQuotes = false;
+    var rows = [], row = [], field = '', inQuotes = false;
     for (var i = 0; i < text.length; i++){
       var c = text[i];
       if (inQuotes){
         if (c === '"'){
           if (text[i + 1] === '"'){ field += '"'; i++; }
           else { inQuotes = false; }
-        } else {
-          field += c;
-        }
+        } else { field += c; }
       } else {
         if (c === '"'){ inQuotes = true; }
         else if (c === ','){ row.push(field); field = ''; }
@@ -513,9 +501,7 @@
           row.push(field); field = '';
           if (row.some(function(f){ return f.trim() !== ''; })) rows.push(row);
           row = [];
-        } else {
-          field += c;
-        }
+        } else { field += c; }
       }
     }
     if (field !== '' || row.length){ row.push(field); rows.push(row); }
@@ -541,7 +527,6 @@
   function loadTestimonialsFromCsv(){
     var url = window.GARGI_CONFIG.testimonialsFile;
     if (!url) return;
-
     fetch(url, { cache: 'no-store' })
       .then(function(res){
         if (!res.ok) throw new Error('testimonials.csv fetch failed: ' + res.status);
@@ -550,17 +535,15 @@
       .then(function(csvText){
         var rows = parseCsv(csvText);
         if (!rows.length) return;
-        var dataRows = rows.slice(1);
-        var items = dataRows
+        var items = rows.slice(1)
           .map(function(r){ return { name: (r[0] || '').trim(), quote: (r[1] || '').trim() }; })
           .filter(function(item){ return item.name && item.quote; });
         if (items.length) renderTestimonials(items);
       })
       .catch(function(err){
-        console.warn('Could not load testimonials.csv, showing placeholders instead:', err);
+        console.warn('Could not load testimonials.csv, using default placeholders:', err);
       });
   }
-
   loadTestimonialsFromCsv();
 
   function slugify(text){
@@ -584,9 +567,7 @@
         img.loading = 'lazy';
         img.onerror = function(){ circle.textContent = 'Image not found: ' + item.image; };
         circle.appendChild(img);
-      } else {
-        circle.textContent = 'Photo needed';
-      }
+      } else { circle.textContent = 'Photo needed'; }
       wrap.appendChild(circle);
 
       var name = document.createElement('div');
@@ -601,7 +582,6 @@
   function loadCollectionsFromCsv(){
     var url = window.GARGI_CONFIG.collectionsFile;
     if (!url) return;
-
     fetch(url, { cache: 'no-store' })
       .then(function(res){
         if (!res.ok) throw new Error('collections.csv fetch failed: ' + res.status);
@@ -610,17 +590,15 @@
       .then(function(csvText){
         var rows = parseCsv(csvText);
         if (!rows.length) return;
-        var dataRows = rows.slice(1);
-        var items = dataRows
+        var items = rows.slice(1)
           .map(function(r){ return { name: (r[0] || '').trim(), image: (r[1] || '').trim() }; })
           .filter(function(item){ return item.name; });
         if (items.length) renderCollections(items);
       })
       .catch(function(err){
-        console.warn('Could not load collections.csv, showing placeholders instead:', err);
+        console.warn('Could not load collections.csv, using default placeholders:', err);
       });
   }
-
   loadCollectionsFromCsv();
 
   function buildWhatsAppLink(customMsg){
@@ -629,19 +607,27 @@
     return 'https://wa.me/' + num + (msg ? ('?text=' + msg) : '');
   }
 
-  var qrObj = null;
+  /* Smart WhatsApp Handler: Direct deep link on mobile, Modal QR on Desktop */
+  function handleBooking(customMsg){
+    var link = buildWhatsAppLink(customMsg);
+    var isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile) {
+      window.open(link, '_blank');
+    } else {
+      openBookingModal(link);
+    }
+  }
 
-  function openBookingModal(customMsg){
+  function openBookingModal(link){
     var modal = document.getElementById('bookingModal');
     modal.classList.add('open');
-    var link = buildWhatsAppLink(customMsg);
     document.getElementById('qrLink').href = link;
 
     var qrEl = document.getElementById('qrcode');
-    qrEl.innerHTML = ''; // Re-render QR code dynamically for the requested service
+    qrEl.innerHTML = '';
 
     if(window.QRCode){
-      qrObj = new QRCode(qrEl, {
+      new QRCode(qrEl, {
         text: link,
         width: 200,
         height: 200,
@@ -649,7 +635,7 @@
         colorLight: '#ffffff'
       });
     } else {
-      qrEl.textContent = 'QR library failed to load — use the link below.';
+      qrEl.textContent = 'QR library failed to load — click link below.';
     }
   }
 
