@@ -13,6 +13,18 @@
 <title>Products | Gargi AstroVastu</title>
 <meta name="description" content="Gargi AstroVastu — Vastu remedies and products.">
 <link rel="icon" type="image/png" href="gargi-astrovastu.png">
+<meta name="theme-color" content="#1E3A8A">
+<script>
+  // Apply saved/system theme before first paint to avoid a light→dark flash.
+  (function(){
+    var t = null;
+    try { t = localStorage.getItem('theme'); } catch(e){}
+    if (t !== 'dark' && t !== 'light') {
+      t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+  })();
+</script>
 
 <!--
   ============================================================
@@ -36,12 +48,15 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Serif+4:wght@400;500;600&family=Noto+Serif+Devanagari:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
 
 <!-- QR code generator -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
+  /* ============================================================
+     THEME TOKENS — Light (default)
+     ============================================================ */
   :root{
     --blue:#1E3A8A;
     --blue-dark:#152a63;
@@ -49,15 +64,91 @@
     --cream:#FDFBF5;
     --ink:#2A2A2A;
     --maxw:1100px;
+    --transition: all 0.2s ease-in-out;
+    --font:-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Helvetica Neue", "Noto Sans Devanagari", Arial, sans-serif;
+    --font-display:-apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Helvetica Neue", "Noto Sans Devanagari", Arial, sans-serif;
+    --text-muted:rgba(42,42,42,0.72);
+
+    --bg:var(--cream);
+    --text:var(--ink);
+    --heading:var(--blue);
+    --accent:var(--gold);
+    --surface:rgba(255,255,255,0.78);
+    --surface-solid:#ffffff;
+    --border:rgba(30,58,138,0.12);
+    --border-strong:rgba(30,58,138,0.25);
+    --header-bg:rgba(253,251,245,0.80);
+    --menu-bg:rgba(253,251,245,0.98);
+    --btn-bg:var(--blue);
+    --btn-bg-hover:var(--blue-dark);
+    --btn-text:#ffffff;
+    --contact-bg:var(--blue);
+    --contact-text:#ffffff;
+    --bottom-nav-bg:var(--blue-dark);
+    --bottom-nav-text:var(--cream);
+    --circle-bg:rgba(30,58,138,0.06);
+    --overlay:rgba(21,42,99,0.55);
+    --shadow:0 4px 24px rgba(10,25,47,0.06);
+    --shadow-hover:0 12px 32px rgba(10,25,47,0.12);
+
+    --star-1:rgba(10,25,47,0.55);
+    --star-2:rgba(201,162,39,0.55);
+    --orbit:rgba(30,58,138,0.18);
+    --sun-core:#E2A021;
+    --sun-glow:rgba(226,160,33,0.32);
+    --planet:rgba(30,58,138,0.75);
+  }
+
+  /* ============================================================
+     THEME TOKENS — Dark
+     ============================================================ */
+  [data-theme="dark"]{
+    --bg:#0A192F;
+    --text:#E6E4DC;
+    --text-muted:#9AA3BF;
+    --heading:#FAF9F5;
+    --accent:#F1C40F;
+    --surface:rgba(17,34,64,0.75);
+    --surface-solid:#112240;
+    --border:rgba(250,249,245,0.10);
+    --border-strong:rgba(250,249,245,0.25);
+    --header-bg:rgba(10,25,47,0.80);
+    --menu-bg:rgba(10,25,47,0.98);
+    --btn-bg:#FAF9F5;
+    --btn-bg-hover:#E2E0D8;
+    --btn-text:#0A192F;
+    --contact-bg:#112240;
+    --contact-text:#FAF9F5;
+    --bottom-nav-bg:#0D1F3C;
+    --bottom-nav-text:#FAF9F5;
+    --circle-bg:rgba(250,249,245,0.06);
+    --overlay:rgba(2,8,20,0.70);
+    --shadow:0 4px 24px rgba(0,0,0,0.30);
+    --shadow-hover:0 12px 32px rgba(0,0,0,0.45);
+
+    --star-1:rgba(250,249,245,0.80);
+    --star-2:rgba(241,196,15,0.70);
+    --orbit:rgba(250,249,245,0.18);
+    --sun-core:#F1C40F;
+    --sun-glow:rgba(241,196,15,0.40);
+    --planet:rgba(250,249,245,0.90);
+    color-scheme:dark;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
     margin:0;
-    background:var(--cream);
-    color:var(--ink);
-    font-family:'Source Serif 4', Georgia, serif;
-    line-height:1.6;
+    background:var(--bg);
+    color:var(--text);
+    transition:background-color .3s ease, color .3s ease;
+    overflow-x:hidden;
+    font-family:var(--font);
+    font-size:17px;
+    line-height:1.47059;
+    letter-spacing:-0.022em;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    text-rendering:optimizeLegibility;
     padding-bottom: 80px; /* Space for mobile sticky bottom action bar */
   }
   @media (min-width:761px){
@@ -65,44 +156,147 @@
   }
 
   h1,h2,h3,.brand{
-    font-family:'Cormorant Garamond', Georgia, serif;
-    color:var(--blue);
+    font-family:var(--font-display);
+    color:var(--heading);
     margin:0 0 0.3em 0;
+    font-weight:700;
+    letter-spacing:-0.015em;
+    line-height:1.1;
   }
-  .devanagari{ font-family:'Noto Serif Devanagari', serif; }
+  .devanagari{ font-family:'Noto Sans Devanagari', var(--font); }
   a{ color:inherit; }
   img{ max-width:100%; display:block; }
+
+  /* ---------- Celestial background ---------- */
+  .celestial-bg{
+    position:fixed; inset:0; width:100vw; height:100vh;
+    pointer-events:none; z-index:0; overflow:hidden;
+  }
+  .warp-container{ position:absolute; inset:0; }
+  .star-layer{
+    position:absolute; inset:-50%; border-radius:50%;
+    transform-origin:50% 50%; will-change:transform, opacity;
+  }
+  .star-layer-1{
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, var(--star-1) 100%, transparent),
+      radial-gradient(2px 2px at 70% 20%, var(--star-1) 100%, transparent),
+      radial-gradient(2.5px 2.5px at 80% 70%, var(--star-1) 100%, transparent),
+      radial-gradient(2px 2px at 30% 80%, var(--star-1) 100%, transparent);
+    background-size:400px 400px;
+    animation:warpForward 8s linear infinite;
+  }
+  .star-layer-2{
+    background-image:
+      radial-gradient(2.5px 2.5px at 15% 60%, var(--star-2) 100%, transparent),
+      radial-gradient(2px 2px at 85% 35%, var(--star-2) 100%, transparent),
+      radial-gradient(2px 2px at 45% 15%, var(--star-2) 100%, transparent),
+      radial-gradient(3px 3px at 60% 85%, var(--star-2) 100%, transparent);
+    background-size:550px 550px;
+    animation:warpForward 12s linear infinite; animation-delay:-4s;
+  }
+  .star-layer-3{
+    background-image:
+      radial-gradient(2px 2px at 40% 40%, var(--star-1) 100%, transparent),
+      radial-gradient(2.5px 2.5px at 60% 60%, var(--star-1) 100%, transparent),
+      radial-gradient(2px 2px at 10% 90%, var(--star-2) 100%, transparent);
+    background-size:300px 300px;
+    animation:warpForward 6s linear infinite; animation-delay:-2s;
+  }
+  @keyframes warpForward{
+    0%{ transform:scale(0.2); opacity:0; }
+    15%{ opacity:0.8; }
+    85%{ opacity:0.9; }
+    100%{ transform:scale(2.5); opacity:0; }
+  }
+  .solar-svg{ position:absolute; inset:0; width:100%; height:100%; }
+  .sun-glow{
+    fill:var(--sun-glow); filter:blur(35px);
+    transform-box:fill-box; transform-origin:center;
+    animation:sunPulse 6s ease-in-out infinite alternate;
+  }
+  .sun-core{ fill:var(--sun-core); transition:fill .3s ease; }
+  @keyframes sunPulse{
+    0%{ transform:scale(0.95); opacity:0.7; }
+    100%{ transform:scale(1.15); opacity:1; }
+  }
+  .orbit-ring{
+    fill:none; stroke:var(--orbit); stroke-width:1.2; stroke-dasharray:4 6;
+    transition:stroke .3s ease;
+  }
+  .planet-body{ fill:var(--planet); transition:fill .3s ease; }
+  .saturn-ring{ fill:none; stroke:var(--planet); stroke-width:1.5; }
+  .orbit-group{ transform-origin:500px 30px; }
+  .mercury-orbit{ animation:spinCW 14s linear infinite; animation-delay:-4s; }
+  .venus-orbit  { animation:spinCW 22s linear infinite; animation-delay:-15s; }
+  .earth-orbit  { animation:spinCW 32s linear infinite; animation-delay:-10s; }
+  .mars-orbit   { animation:spinCW 45s linear infinite; animation-delay:-33s; }
+  .jupiter-orbit{ animation:spinCW 70s linear infinite; animation-delay:-22s; }
+  .saturn-orbit { animation:spinCW 100s linear infinite; animation-delay:-72s; }
+  .uranus-orbit { animation:spinCW 140s linear infinite; animation-delay:-45s; }
+  .neptune-orbit{ animation:spinCW 180s linear infinite; animation-delay:-130s; }
+  @keyframes spinCW{ from{ transform:rotate(0deg); } to{ transform:rotate(360deg); } }
+
+  @media (prefers-reduced-motion: reduce){
+    .star-layer, .sun-glow, .orbit-group{ animation:none; }
+    .star-layer{ opacity:0.6; transform:scale(1); }
+  }
+
+  main, footer{ position:relative; z-index:1; }
+
+  /* ---------- Theme toggle ---------- */
+  .nav-right{ display:flex; align-items:center; gap:24px; }
+  .theme-toggle{
+    background:var(--surface); color:var(--heading);
+    border:1px solid var(--border-strong); border-radius:999px;
+    padding:0; width:36px; height:36px; justify-content:center;
+    font-family:var(--font); font-size:0.82rem; font-weight:500; letter-spacing:-0.01em;
+    display:inline-flex; align-items:center; gap:6px; cursor:pointer;
+    transition:background-color .25s ease, transform .25s ease, color .25s ease;
+  }
+  .theme-toggle:hover{ transform:scale(1.03); }
+  .theme-toggle:focus-visible, .menu-toggle:focus-visible, .btn:focus-visible{
+    outline:2px solid var(--accent); outline-offset:2px;
+  }
+  .theme-toggle svg{ width:17px; height:17px; fill:currentColor; }
+  .theme-toggle .icon-sun{ display:none; }
+  [data-theme="dark"] .theme-toggle .icon-sun{ display:block; }
+  [data-theme="dark"] .theme-toggle .icon-moon{ display:none; }
 
   /* ---------- Nav ---------- */
   header.site-header{
     position:sticky; top:0; z-index:50;
-    background:rgba(253,251,245,0.95);
-    backdrop-filter:blur(8px);
-    -webkit-backdrop-filter:blur(8px);
-    border-bottom:1px solid rgba(30,58,138,0.12);
+    background:var(--header-bg);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--border);
+    transition:background-color .3s ease, border-color .3s ease;
   }
   .nav-wrap{
     max-width:var(--maxw); margin:0 auto;
     display:flex; align-items:center; justify-content:space-between;
     padding:14px 20px;
   }
-  .brand{ display:flex; align-items:center; gap:10px; font-size:1.4rem; font-weight:700; text-decoration:none; }
+  .brand{ display:flex; align-items:center; gap:10px; font-size:1.3rem; font-weight:600; letter-spacing:-0.022em; text-decoration:none; margin:0; }
   .brand .g-mark{ width:36px; height:36px; object-fit:contain; }
-  nav.links{ display:flex; gap:24px; font-size:0.98rem; }
-  nav.links a{ text-decoration:none; color:var(--ink); opacity:0.85; transition:color .15s; }
-  nav.links a:hover, nav.links a.current{ color:var(--blue); opacity:1; font-weight:600; }
-  .menu-toggle{ display:none; background:none; border:none; font-size:1.6rem; color:var(--blue); cursor:pointer; padding:4px 8px; }
+  nav.links{ display:flex; gap:24px; font-size:0.88rem; font-weight:500; letter-spacing:-0.01em; }
+  nav.links a{ text-decoration:none; color:var(--text); opacity:0.85; transition:color .15s; }
+  nav.links a:hover, nav.links a.current{ color:var(--heading); opacity:1; font-weight:600; }
+  .menu-toggle{ display:none; background:none; border:none; font-size:1.6rem; color:var(--heading); cursor:pointer; padding:4px 8px; min-height:44px; }
 
   @media (max-width:760px){
     .brand{ font-size:1.25rem; }
     .brand .g-mark{ width:32px; height:32px; }
     nav.links{ display:none; }
     .menu-toggle{ display:block; }
+    .nav-right{ gap:6px; }
+    .theme-toggle{ width:44px; height:44px; }
     nav.links.open{
       display:flex; flex-direction:column; position:absolute; top:100%; left:0; right:0;
-      background:var(--cream); padding:20px; gap:16px; 
-      border-bottom:1px solid rgba(30,58,138,0.12);
-      box-shadow:0 10px 20px rgba(0,0,0,0.05);
+      background:var(--menu-bg); padding:20px; gap:16px; 
+      backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--border);
+      box-shadow:var(--shadow);
     }
   }
 
@@ -110,28 +304,28 @@
   .btn{
     display:inline-flex; align-items:center; justify-content:center; gap:8px;
     padding:12px 24px; border-radius:999px;
-    font-family:'Source Serif 4', serif; font-size:0.95rem; text-decoration:none;
-    cursor:pointer; border:1.5px solid var(--blue); transition:all .15s ease;
+    font-family:var(--font); font-size:0.95rem; font-weight:500; letter-spacing:-0.01em; text-decoration:none;
+    cursor:pointer; border:1.5px solid var(--btn-bg); transition:all .15s ease;
     text-align:center;
   }
   .btn:hover{ transform:translateY(-1px); }
-  .btn-primary{ background:var(--blue); color:#fff; }
-  .btn-primary:hover{ background:var(--blue-dark); }
+  .btn-primary{ background:var(--btn-bg); color:var(--btn-text); }
+  .btn-primary:hover{ background:var(--btn-bg-hover); border-color:var(--btn-bg-hover); }
   .btn-gold{ background:var(--gold); border-color:var(--gold); color:#fff; }
   .btn-small{ padding:8px 16px; font-size:0.88rem; }
-  .btn-outline{ background:transparent; border-color:rgba(30,58,138,0.3); color:var(--blue); }
-  .btn-outline:hover{ border-color:var(--blue); background:rgba(30,58,138,0.05); }
+  .btn-outline{ background:var(--surface); border-color:var(--border-strong); color:var(--heading); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+  .btn-outline:hover{ border-color:var(--heading); background:var(--circle-bg); }
 
   /* ---------- Page Hero ---------- */
   .page-hero{ max-width:var(--maxw); margin:0 auto; padding:32px 20px 12px; text-align:center; }
-  .page-hero h1{ font-size:2.2rem; }
-  .page-hero .sub{ font-size:1.05rem; opacity:0.8; margin-top:4px; }
+  .page-hero h1{ font-size:clamp(2.4rem, 5.5vw, 3.6rem); line-height:1.07143; letter-spacing:-0.02em; }
+  .page-hero .sub{ font-size:clamp(1.1rem, 2.3vw, 1.3rem); line-height:1.35; color:var(--text-muted); margin-top:4px; }
   .page-hero .hero-actions{ margin-top:14px; }
 
   /* ---------- Products: Category Rows ---------- */
   #categoriesContainer{ max-width:var(--maxw); margin:0 auto; padding:16px 20px 40px; }
   .category-section{ margin-bottom:40px; }
-  .category-section h2{ text-align:left; font-size:1.5rem; margin-bottom:14px; }
+  .category-section h2{ text-align:left; font-size:clamp(1.5rem, 3vw, 1.9rem); margin-bottom:14px; }
 
   .carousel-wrap{ position:relative; }
   .carousel{
@@ -140,21 +334,22 @@
     padding:4px 4px 16px;
     -webkit-overflow-scrolling:touch;
     scrollbar-width:thin;
-    scrollbar-color:rgba(30,58,138,0.25) transparent;
+    scrollbar-color:var(--accent) transparent;
   }
-  .carousel::-webkit-scrollbar{ height:5px; }
-  .carousel::-webkit-scrollbar-thumb{ background:rgba(30,58,138,0.25); border-radius:3px; }
+  .carousel::-webkit-scrollbar{ height:6px; }
+  .carousel::-webkit-scrollbar-track{ background:transparent; }
+  .carousel::-webkit-scrollbar-thumb{ background:var(--accent); border-radius:999px; }
 
   .car-arrow{
     position:absolute; top:42%; transform:translateY(-50%);
     width:38px; height:38px; border-radius:50%;
-    border:1px solid rgba(30,58,138,0.25); background:#fff; color:var(--blue);
+    border:1px solid var(--border-strong); background:var(--surface-solid); color:var(--heading);
     cursor:pointer; font-size:1.3rem; line-height:1; z-index:5;
     display:flex; align-items:center; justify-content:center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    box-shadow:var(--shadow);
     transition:all .15s ease;
   }
-  .car-arrow:hover{ background:var(--blue); color:#fff; }
+  .car-arrow:hover{ background:var(--btn-bg); color:var(--btn-text); }
   .car-arrow.left{ left:-14px; }
   .car-arrow.right{ right:-14px; }
   @media (max-width:760px){
@@ -162,11 +357,15 @@
   }
 
   .product-card{
-    background:#fff; border:1px solid rgba(30,58,138,0.12); border-radius:14px;
+    background:var(--surface);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--border); border-radius:14px;
     overflow:hidden; display:flex; flex-direction:column;
     flex:0 0 260px; width:260px; height:auto; scroll-snap-align:start;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    box-shadow:var(--shadow);
+    transition:transform .3s cubic-bezier(0,0,0.2,1), box-shadow .3s ease, background-color .3s ease;
   }
+  .product-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-hover); }
   @media (max-width:480px){
     .product-card{ flex:0 0 82vw; width:82vw; } /* Full preview card on smaller phones */
   }
@@ -174,8 +373,8 @@
   .product-photo{
     position:relative; background:#fff;
     display:flex; align-items:center; justify-content:center;
-    color:var(--blue); font-size:0.88rem; text-align:center; padding:12px;
-    aspect-ratio:1/1; overflow:hidden; border-bottom:1px solid rgba(0,0,0,0.05);
+    color:#1E3A8A; font-size:0.88rem; text-align:center; padding:12px;
+    aspect-ratio:1/1; overflow:hidden; border-bottom:1px solid var(--border);
   }
   .product-photo img{ width:100%; height:100%; display:block; object-fit:contain; }
   .product-photo.is-clickable{ cursor:zoom-in; }
@@ -184,16 +383,16 @@
 
   .product-body{ padding:16px; display:flex; flex-direction:column; gap:8px; flex:1; }
   .product-body h3{ 
-    font-size:1.15rem; margin-bottom:0; min-height:2.4em; line-height:1.25; 
+    font-size:1.15rem; font-weight:600; letter-spacing:-0.02em; margin-bottom:0; min-height:2.4em; line-height:1.25; 
   }
-  .product-price{ color:var(--gold); font-weight:600; font-size:1.05rem; margin-top:auto; padding-top:4px; }
+  .product-price{ color:var(--accent); font-weight:600; font-size:1.1rem; letter-spacing:-0.02em; margin-top:auto; padding-top:4px; }
   .product-card .btn{ margin-top:8px; width:100%; }
 
   /* ---------- Sticky Mobile Bottom Bar ---------- */
   .mobile-bottom-bar{
     display:none; position:fixed; bottom:0; left:0; right:0; z-index:90;
-    background:rgba(253,251,245,0.96); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
-    border-top:1px solid rgba(30,58,138,0.15); padding:10px 16px;
+    background:var(--header-bg); backdrop-filter:saturate(180%) blur(20px); -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-top:1px solid var(--border); padding:10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
     box-shadow:0 -4px 16px rgba(0,0,0,0.08);
   }
   .mobile-bottom-bar .bar-inner{
@@ -220,35 +419,86 @@
   }
 
   .modal-overlay{
-    position:fixed; inset:0; background:rgba(21,42,99,0.6);
+    position:fixed; inset:0; background:var(--overlay);
     display:none; align-items:center; justify-content:center; z-index:100; padding:20px;
   }
   .modal-overlay.open{ display:flex; }
   .modal-box{
-    background:#fff; border-radius:18px; padding:28px 24px; max-width:360px; width:100%;
-    text-align:center; position:relative; box-shadow:0 10px 30px rgba(0,0,0,0.15);
+    background:var(--surface-solid); color:var(--text); border-radius:18px; padding:28px 24px; max-width:360px; width:100%;
+    text-align:center; position:relative; box-shadow:var(--shadow-hover);
   }
   .modal-box h3{ margin-bottom:6px; font-size:1.4rem; }
-  .modal-box p.hint{ font-size:0.88rem; opacity:0.8; margin-bottom:16px; }
-  #qrcode{ display:flex; justify-content:center; margin:0 auto 16px; }
+  .modal-box p.hint{ font-size:0.88rem; color:var(--text-muted); margin-bottom:16px; }
+  #qrcode{ display:flex; justify-content:center; margin:0 auto; line-height:0; }
+  .qr-badge{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    background:#ffffff; color:#1E3A8A;
+    border:1.5px solid #1E3A8A; border-radius:6px;
+    padding:3px 7px; font-family:var(--font); font-size:11px; font-weight:700;
+    letter-spacing:-0.01em; line-height:1.2; white-space:nowrap;
+    pointer-events:none; box-shadow:0 0 0 3px #ffffff;
+  }
+
   .modal-close{
     position:absolute; top:12px; right:14px; background:none; border:none;
-    font-size:1.6rem; color:var(--blue); cursor:pointer; padding:4px 8px;
+    font-size:1.6rem; color:var(--heading); cursor:pointer; padding:4px 8px;
   }
-  #qrLink{ display:inline-block; border-radius:12px; }
+  #qrLink{ position:relative; display:inline-block; border-radius:12px; transition:transform .15s ease, box-shadow .15s ease; }
+  #qrLink:hover{ transform:translateY(-2px); box-shadow:0 6px 18px rgba(30,58,138,0.18); }
+  [data-theme="dark"] #qrLink{ background:#fff; padding:10px; }
+  [data-theme="dark"] .brand .g-mark{ background:var(--cream); border-radius:50%; }
 
-  footer{ text-align:center; padding:30px 20px 40px; font-size:0.85rem; opacity:0.75; }
+  footer{ text-align:center; padding:30px 20px 40px; font-size:0.8rem; color:var(--text-muted); }
   .social-row{ display:flex; justify-content:center; gap:16px; margin-bottom:14px; opacity:1; }
   .social-row a{
-    width:38px; height:38px; border-radius:50%; border:1px solid rgba(30,58,138,0.25);
-    display:flex; align-items:center; justify-content:center; color:var(--blue);
+    width:38px; height:38px; border-radius:50%; border:1px solid var(--border-strong);
+    display:flex; align-items:center; justify-content:center; color:var(--heading);
     transition:all .15s ease;
   }
-  .social-row a:hover{ background:var(--blue); color:#fff; }
+  .social-row a:hover{ background:var(--btn-bg); color:var(--btn-text); }
   .social-row svg{ width:18px; height:18px; fill:currentColor; }
 </style>
 </head>
 <body>
+
+<div class="celestial-bg" aria-hidden="true">
+  <div class="warp-container">
+    <div class="star-layer star-layer-1"></div>
+    <div class="star-layer star-layer-2"></div>
+    <div class="star-layer star-layer-3"></div>
+  </div>
+  <svg class="solar-svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMin slice">
+    <circle class="sun-glow" cx="500" cy="30" r="120" />
+    <circle class="sun-core" cx="500" cy="30" r="38" />
+
+    <circle class="orbit-ring" cx="500" cy="30" r="75" />
+    <g class="orbit-group mercury-orbit"><circle class="planet-body" cx="575" cy="30" r="4" /></g>
+
+    <circle class="orbit-ring" cx="500" cy="30" r="115" />
+    <g class="orbit-group venus-orbit"><circle class="planet-body" cx="615" cy="30" r="7" /></g>
+
+    <circle class="orbit-ring" cx="500" cy="30" r="160" />
+    <g class="orbit-group earth-orbit"><circle class="planet-body" cx="660" cy="30" r="8" /></g>
+
+    <circle class="orbit-ring" cx="500" cy="30" r="210" />
+    <g class="orbit-group mars-orbit"><circle class="planet-body" cx="710" cy="30" r="6" /></g>
+
+    <circle class="orbit-ring" cx="500" cy="30" r="270" />
+    <g class="orbit-group jupiter-orbit"><circle class="planet-body" cx="770" cy="30" r="16" /></g>
+
+    <circle class="orbit-ring" cx="500" cy="30" r="335" />
+    <g class="orbit-group saturn-orbit">
+      <circle class="planet-body" cx="835" cy="30" r="12" />
+      <ellipse class="saturn-ring" cx="835" cy="30" rx="20" ry="6" transform="rotate(-25 835 30)" />
+    </g>
+
+    <circle class="orbit-ring" cx="500" cy="30" r="395" />
+    <g class="orbit-group uranus-orbit"><circle class="planet-body" cx="895" cy="30" r="10" /></g>
+
+    <circle class="orbit-ring" cx="500" cy="30" r="450" />
+    <g class="orbit-group neptune-orbit"><circle class="planet-body" cx="950" cy="30" r="9" /></g>
+  </svg>
+</div>
 
 <header class="site-header">
   <div class="nav-wrap">
@@ -256,14 +506,22 @@
       <img class="g-mark" src="gargi-astrovastu.png" alt="Gargi AstroVastu logo" onerror="this.style.display='none'">
       Gargi AstroVastu
     </a>
-    <button class="menu-toggle" onclick="document.querySelector('nav.links').classList.toggle('open')" aria-label="Toggle Menu">&#9776;</button>
-    <nav class="links">
-      <a href="index.html">Home</a>
-      <a href="index.html#services">Services</a>
-      <a href="products.html" class="current">Products</a>
-      <a href="index.html#testimonials">Testimonials</a>
-      <a href="index.html#contact">Contact</a>
-    </nav>
+    <div class="nav-right">
+      <nav class="links">
+        <a href="index.html">Home</a>
+        <a href="index.html#services">Services</a>
+        <a href="products.html" class="current">Products</a>
+        <a href="index.html#testimonials">Testimonials</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme" aria-pressed="false">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM2 13h2a1 1 0 0 0 0-2H2a1 1 0 0 0 0 2zm18 0h2a1 1 0 0 0 0-2h-2a1 1 0 0 0 0 2zM11 2v2a1 1 0 0 0 2 0V2a1 1 0 0 0-2 0zm0 18v2a1 1 0 0 0 2 0v-2a1 1 0 0 0-2 0zM5.99 4.58a1 1 0 0 0-1.41 1.41l1.06 1.06a1 1 0 0 0 1.41-1.41L5.99 4.58zm12.37 12.37a1 1 0 0 0-1.41 1.41l1.06 1.06a1 1 0 0 0 1.41-1.41l-1.06-1.06zm1.06-10.96a1 1 0 0 0-1.41-1.41l-1.06 1.06a1 1 0 0 0 1.41 1.41l1.06-1.06zM7.05 18.36a1 1 0 0 0-1.41-1.41l-1.06 1.06a1 1 0 0 0 1.41 1.41l1.06-1.06z"/></svg>
+      </button>
+
+      <button class="menu-toggle" onclick="document.querySelector('nav.links').classList.toggle('open')" aria-label="Toggle Menu">&#9776;</button>
+    </div>
   </div>
 </header>
 
@@ -327,6 +585,7 @@
     <p class="hint">Scan QR with WhatsApp or tap below to chat directly</p>
     <a href="#" id="qrLink" target="_blank" rel="noopener" aria-label="Open WhatsApp">
       <div id="qrcode"></div>
+      <span class="qr-badge" aria-hidden="true">Click Me</span>
     </a>
   </div>
 </div>
@@ -344,6 +603,38 @@
   document.getElementById('socialFacebook').href = window.GARGI_CONFIG.facebookUrl;
   document.getElementById('socialYoutube').href = window.GARGI_CONFIG.youtubeUrl;
   
+  (function(){
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+    function current(){ return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
+    function apply(theme){
+      if (theme === 'dark') root.setAttribute('data-theme', 'dark');
+      else root.removeAttribute('data-theme');
+      var dark = theme === 'dark';
+      btn.setAttribute('aria-pressed', String(dark));
+      btn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+      if (meta) meta.setAttribute('content', dark ? '#0A192F' : '#1E3A8A');
+    }
+    function saved(){ try { return localStorage.getItem('theme'); } catch(e){ return null; } }
+
+    apply(current());
+
+    btn.addEventListener('click', function(){
+      var next = current() === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem('theme', next); } catch(e){}
+      apply(next);
+    });
+
+    if (mq){
+      var onSystemChange = function(e){ if (!saved()) apply(e.matches ? 'dark' : 'light'); };
+      if (mq.addEventListener) mq.addEventListener('change', onSystemChange);
+      else if (mq.addListener) mq.addListener(onSystemChange);
+    }
+  })();
+
   // Set up call button link for mobile bottom bar
   if (document.getElementById('mobileCallBtn') && window.GARGI_CONFIG.contactPhone) {
     document.getElementById('mobileCallBtn').href = 'tel:' + window.GARGI_CONFIG.contactPhone.replace(/\s+/g, '');
@@ -550,7 +841,8 @@
         width: 190,
         height: 190,
         colorDark: '#1E3A8A',
-        colorLight: '#ffffff'
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
       });
     } else {
       qrEl.textContent = 'QR library failed to load — tap below to open.';
